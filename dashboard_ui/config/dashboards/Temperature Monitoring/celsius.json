@@ -245,7 +245,8 @@
                 "value": 1
               }
             ]
-          }
+          },
+          "unit": "celsius"
         },
         "overrides": [
           {
@@ -513,8 +514,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Temperature_starter_solution",
+  "title": "Celsius",
   "uid": "70aiGq34k",
-  "version": 6,
+  "version": 7,
   "weekStart": ""
 }
