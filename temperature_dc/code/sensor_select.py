@@ -179,7 +179,7 @@ class PT100_raspi_sequentmicrosystems_HAT:
         self.stack = stack
 
     def get_temperature(self):
-        logger.info("TemperatureMeasureBuildingBlock- PT100_raspi_sequentmicrosystems_HAT started")
+        logger.info("TemperatureMeasureBuildingBlock- PT100_raspi_sequentmicrosystems_HAT started on channel " + str(self.channel))
         return self.RTD_ADC.get_poly5(self.stack, self.channel)
 
 
