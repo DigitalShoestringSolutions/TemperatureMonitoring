@@ -59,7 +59,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": 10000,
+            "spanNulls": 60000,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -310,7 +310,7 @@
           "custom": {
             "fillOpacity": 70,
             "lineWidth": 0,
-            "spanNulls": 10000
+            "spanNulls": 60000
           },
           "mappings": [],
           "thresholds": {
