@@ -112,7 +112,7 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
         elif self.config['sensing']['adc'] == 'PT100_raspi_MAX31865':
             sensor = sen.PT100_raspi_MAX31865()
         elif self.config['sensing']['adc'] == 'PT100_raspi_SMHAT':
-            sensor = sen.PT100_raspi_sequentmicrosystems_HAT()
+            sensor = sen.PT100_raspi_sequentmicrosystems_HAT(self.config.get('sensing.adc.channel', 1) # select which channel (1-8) to use from config file. Defaults to 1 if not set.
 
         else:
             raise Exception(f'ADC "{self.config["sensing"]["adc"]}" not recognised/supported')
