@@ -172,13 +172,15 @@ class PT100_raspi_MAX31865:
 
 class PT100_raspi_sequentmicrosystems_HAT:
 
-    def __init__(self):
+    def __init__(self, channel=1, stack=0):
         import adc.SequentMicrosystemsRTDHAT as RTDHAT
         self.RTD_ADC = RTDHAT
+        self.channel = channel
+        self.stack = stack
 
     def get_temperature(self):
         logger.info("TemperatureMeasureBuildingBlock- PT100_raspi_sequentmicrosystems_HAT started")
-        return self.RTD_ADC.get_poly5(0, 6) # hard coding first layer, channel "RTD6". To be made configurable.
+        return self.RTD_ADC.get_poly5(self.stack, self.channel)
 
 
 class aht20:
