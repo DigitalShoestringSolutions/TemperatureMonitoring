@@ -21,6 +21,7 @@
       }
     ]
   },
+  "description": "",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
@@ -110,21 +111,6 @@
                 "id": "color",
                 "value": {
                   "fixedColor": "semi-dark-blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Incubator"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "semi-dark-green",
                   "mode": "fixed"
                 }
               }
@@ -233,34 +219,13 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "dark-blue",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 0
-              },
-              {
                 "color": "dark-green",
-                "value": 1
+                "value": null
               }
             ]
           }
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "AlertVal"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Alert Status"
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 9,
@@ -515,6 +480,6 @@
   "timezone": "",
   "title": "Single Sensor",
   "uid": "70aiGq34k",
-  "version": 6,
+  "version": 4,
   "weekStart": ""
 }
