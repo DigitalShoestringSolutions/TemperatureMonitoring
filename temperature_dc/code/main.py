@@ -48,12 +48,15 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(level
 
 def get_config(env_var="CONFIG_FILE", default_file_path="./config/config.toml"):
 
-    env_file_path = os.getenv(env_var)
+    # If an environment variable is set with the specified key, use it as the path to the config file
+    env_file_path = os.getenv(env_var) # returns None if env var not set
     if env_file_path:
         config_file_path = env_file_path
+    # If no such environment variable, failover to using specified string directly
     else:
         config_file_path = default_file_path
-        
+
+    # Open the file, parse the contents as toml and return as dictionary
     with open(config_file_path, "rb") as f:
         toml_conf = tomli.load(f)
     logger.info(f"config:{toml_conf}")
