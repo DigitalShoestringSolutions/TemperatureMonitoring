@@ -117,7 +117,7 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
             while channel > 8: # channels > 8 will be referred to higher up the stack (0-7). Allows for all 64 potential channels to be called from a single int.
                 stack   += 1   # allow large stack numbers, but >7 will fail at runtime.
                 channel -= 8
-            sensor = sen.PT100_raspi_sequentmicrosystems_HAT(channel, stack)
+            sensor = sen.PT100_raspi_sequentmicrosystems_HAT(stack, channel)
 
         else:
             raise Exception(f'ADC "{self.config["sensing"]["adc"]}" not recognised/supported')
