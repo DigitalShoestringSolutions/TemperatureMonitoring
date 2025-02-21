@@ -170,8 +170,7 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
                 payload = {"machine": self.constants['machine'], "temp": average_sample, "AlertVal": AlertVal, "ThresholdLow": th_low, "ThresholdHigh": th_high, "sensor": self.config['sensing']['adc'], "timestamp": timestamp}
 
                 # send
-                output = {"path": "", "payload": payload}
-                self.dispatch(output)
+                self.dispatch(payload)
 
             # handle sample rate
             if sleep_time <= 0:
@@ -180,8 +179,9 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
 
             sleep_time = t - time.time()
             time.sleep(max(0.0, sleep_time))
+
         logger.info("done")
 
-    def dispatch(self, output):
-        logger.info(f"dispatch to { output['path']} of {output['payload']}")
-        self.zmq_out.send_json({'path': output.get('path', ""), 'payload': output['payload']})
+    def dispatch(self, payload):
+        logger.info(payload)
+        self.zmq_out.send_json({'path': "", 'payload': payload})
