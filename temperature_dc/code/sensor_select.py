@@ -30,7 +30,6 @@
 from smbus2 import SMBus
 #from mlx90614 import MLX90614              # imported below when class is created
 #from w1thermsensor import W1ThermSensor    # imported below when class is created
-#import max6675                             # imported below when class is created
 #import MAX31865                            # imported below when class is created
 #import board                               # imported below when class is created
 import logging
@@ -73,21 +72,6 @@ class k_type_DFRobot_MAX31855:
         logger.info("TemperatureMeasureBuildingBlock- k_type_DFRobot_MAX31855 started")
         return self.max31855.read_celsius()
 
-
-
-class k_type_MAX6675:
-    # https://github.com/archemius/MAX6675-Raspberry-pi-python/blob/master/temp_read_1_sensor.py
-    def __init__(self):
-        import adc.max6675
-        self.max6675 = adc.max6675
-        self.cs = 23
-        self.sck = 24
-        self.so = 25
-        self.max6675.set_pin(self.cs, self.sck, self.so, 1) #[unit : 0 - raw, 1 - Celsius, 2 - Fahrenheit]
-    
-    def get_temperature(self):
-        logger.info("TemperatureMeasureBuildingBlock- k_type_MAX6675 started")
-        return self.max6675.read_temp(self.cs)
 
 
 class MLX90614:
