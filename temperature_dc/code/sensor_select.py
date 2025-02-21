@@ -26,34 +26,19 @@
 #
 # ----------------------------------------------------------------------
 
-#import math                                # Not used currently
 from smbus2 import SMBus
-#from mlx90614 import MLX90614              # imported below when class is created
-#from w1thermsensor import W1ThermSensor    # imported below when class is created
-#import MAX31865                            # imported below when class is created
-#import board                               # imported below when class is created
-import logging
-import importlib
-#import serial                              # imported below when class is created
 import json
+import logging
 import time
 
-# import sys
-# sys.path.append(docker exec -it )
-# from DFRobot_MAX31855 import *
+#from mlx90614 import MLX90614              # imported below when class is created
+#from w1thermsensor import W1ThermSensor    # imported below when class is created
+#import serial                              # imported below when class is created
+#import adc.MAX31865                        # imported below when class is created
+#import adc.DFRobot_MAX31855                # imported below when class is created
+#import adc.SequentMicrosystemsRTDHAT       # imported below when class is created
 
 logger = logging.getLogger("main.measure.sensor")
-
-
-#adc_module = "DFRobot_MAX31855"
-#try:
-#    local_lib = importlib.import_module(f"adc.{adc_module}")
-#    logger.debug(f"Imported {adc_module}")
-#except ModuleNotFoundError as e:
-#    logger.error(f"Unable to import module {adc_module}. Stopping!!")
-
-
-
 
 
 
