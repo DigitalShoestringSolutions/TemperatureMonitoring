@@ -52,10 +52,6 @@ def get_config():
     return toml_conf
 
 
-def config_valid(config):
-    return True
-
-
 def create_building_blocks(config):
     bbs = {}
 
@@ -78,8 +74,6 @@ def start_building_blocks(bbs):
 if __name__ == "__main__":
     config = get_config()
     # todo set logging level from config file
-    if config_valid(config):
-        bbs = create_building_blocks(config)
-        start_building_blocks(bbs)
-    else:
-        raise Exception("bad config")
+    bbs = create_building_blocks(config)
+    start_building_blocks(bbs)
+
