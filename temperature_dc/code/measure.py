@@ -152,7 +152,7 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
                 num_samples = 0
                 sample_accumulator = 0
                 print(average_sample)
-                logger.info(f"temperature_reading: {average_sample}")
+                logger.debug(f"temperature_reading: {average_sample}") # reading is part of full message, which is info logged below. Don't duplicate.
 
                 # Compare against thresholds 
                 if average_sample > th_high:
