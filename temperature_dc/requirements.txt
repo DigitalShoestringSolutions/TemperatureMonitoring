@@ -8,11 +8,11 @@ smbus2==0.5.0        # i2c sensors
 spidev==3.6          # spi sensors
 
 # Specific sensors
-PyMLX90614==0.0.4                    # MLX90614 IR sensor
-w1thermsensor==2.3.0                 # one-wire sensor DS18B20
+PyMLX90614==0.0.4    # MLX90614 IR sensor
+w1thermsensor==2.3.0 # one-wire sensor DS18B20
 
 # Other
-paho-mqtt==1.6.1 # publishing readings over MQTT
-tomli==2.0.1     # parsing .toml config files
-pyzmq==25.1.1    # ZeroMQ for passing data between python threads
-chevron==0.14.0  # for rendering Mustache templating language in MQTT topics
+paho-mqtt==1.6.1     # publishing readings over MQTT
+tomli==2.0.1         # parsing .toml config files
+pyzmq==25.1.1        # ZeroMQ for passing data between python threads
+chevron==0.14.0      # for rendering Mustache templating language in MQTT topics
