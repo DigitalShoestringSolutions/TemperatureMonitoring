@@ -3,7 +3,7 @@
 # Each dependency must by accompanied by a comment explaining why it is needed
 
 # Hardware interfaces
-pyserial==3.5        # ?
+pyserial==3.5        # for interfacing with arduino etc
 smbus2==0.4.3        # i2c sensors
 spidev==3.6          # spi sensors
 rpi.gpio             # Other I/O - but does this work in a docker container on Raspi OS?

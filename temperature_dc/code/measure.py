@@ -39,7 +39,6 @@ import time
 import sensor_select as sen
 import importlib
 import zmq
-import serial
 import json
 
 # logging.basicConfig(filename='/app_temp.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
