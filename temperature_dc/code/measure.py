@@ -43,10 +43,8 @@ import serial
 import json
 
 # logging.basicConfig(filename='/app_temp.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger("main.measure") # applies a schema similar to above
-logger.setLevel(logging.INFO)
-console_handler = logging.StreamHandler()
-logger.addHandler(console_handler)
+logger = logging.getLogger("main.measure") # applies a schema similar to above inherited from main's logger
+#logger.setLevel(logging.INFO) # log level is inherited from main's logger, unless it is overwritten here
 
 context = zmq.Context()
 
