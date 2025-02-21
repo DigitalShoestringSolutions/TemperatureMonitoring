@@ -62,6 +62,7 @@ logger = logging.getLogger("main.measure.sensor")
 class k_type_DFRobot_MAX31855:
     # https://github.com/DFRobot/DFRobot_MAX31855/tree/main/raspberrypi/python
     def __init__(self):
+        logger.debug("TemperatureMeasureBuildingBlock- k_type_DFRobot_MAX31855 created")
         import adc.DFRobot_MAX31855 as DFRobot_MAX31855
         self.I2C_1       = 0x01
         self.I2C_ADDRESS = 0x10
@@ -79,6 +80,7 @@ class k_type_DFRobot_MAX31855:
 class k_type_MAX6675:
     # https://github.com/archemius/MAX6675-Raspberry-pi-python/blob/master/temp_read_1_sensor.py
     def __init__(self):
+        logger.debug("TemperatureMeasureBuildingBlock- k_type_MAX6675 created")
         import adc.max6675
         self.max6675 = adc.max6675
         self.cs = 23
@@ -93,6 +95,7 @@ class k_type_MAX6675:
 
 class MLX90614:
     def __init__(self):
+        logger.debug("TemperatureMeasureBuildingBlock- MLX90614 created")
         from mlx90614 import MLX90614
         self.bus = SMBus(1)
         self.sensor=MLX90614(self.bus,address=0x5a)
@@ -109,6 +112,7 @@ class MLX90614:
 
 class sht30:
     def __init__(self):
+        logger.debug("TemperatureMeasureBuildingBlock- SHT30 created")
         self.bus = SMBus(1)
         self.bus.write_i2c_block_data(0x44, 0x2C, [0x06])
         time.sleep(0.5)
@@ -123,6 +127,7 @@ class sht30:
 
 class W1Therm:
     def __init__(self):
+        logger.debug("TemperatureMeasureBuildingBlock- w1therm created")
         from w1thermsensor import W1ThermSensor
         self.sensor = W1ThermSensor()
 
@@ -136,6 +141,7 @@ class W1Therm:
 class PT100_arduino:
 
     def __init__(self):
+        logger.debug("TemperatureMeasureBuildingBlock- PT100_arduino created")
         import serial
         self.ser = serial.Serial(port='/dev/ttyACM0', baudrate=115200, timeout=1)
 
@@ -157,6 +163,7 @@ class PT100_arduino:
 class PT100_raspi_MAX31865:
 
     def __init__(self):
+        logger.debug("TemperatureMeasureBuildingBlock- PT100_raspi_MAX31865 created")
         import adc.MAX31865 as MAX31865
         self.MyMax = MAX31865.max31865()
         self.MyMax.set_config(VBias=1, continous=1, filter50Hz=1)
@@ -173,6 +180,7 @@ class PT100_raspi_MAX31865:
 class PT100_raspi_sequentmicrosystems_HAT:
 
     def __init__(self):
+        logger.debug("TemperatureMeasureBuildingBlock- PT100_raspi_sequentmicrosystems_HAT created")
         import adc.SequentMicrosystemsRTDHAT as RTDHAT
         self.RTD_ADC = RTDHAT
 
@@ -183,6 +191,7 @@ class PT100_raspi_sequentmicrosystems_HAT:
 
 class aht20:
     def __init__(self):
+        logger.debug("TemperatureMeasureBuildingBlock- aht20 created")
         import board
         import adafruit_ahtx0
         # self.bus = SMBus(1)
