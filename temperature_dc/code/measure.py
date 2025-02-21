@@ -115,8 +115,6 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
             sensor = sen.k_type_DFRobot_MAX31855()
         elif self.config['sensing']['adc'] == 'K-type_MAX6675':
             sensor = sen.k_type_MAX6675()
-        elif self.config['sensing']['adc'] == 'AHT20':
-            sensor = sen.aht20()
         elif self.config['sensing']['adc'] == 'SHT30':
             sensor = sen.sht30()
         elif self.config['sensing']['adc'] == 'PT100_arduino':

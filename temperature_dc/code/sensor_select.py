@@ -32,7 +32,6 @@ from smbus2 import SMBus
 #from w1thermsensor import W1ThermSensor    # imported below when class is created
 #import max6675                             # imported below when class is created
 #import MAX31865                            # imported below when class is created
-#import adafruit_ahtx0                      # imported below when class is created
 #import board                               # imported below when class is created
 import logging
 import importlib
@@ -179,17 +178,3 @@ class PT100_raspi_sequentmicrosystems_HAT:
     def get_temperature(self):
         logger.info("TemperatureMeasureBuildingBlock- PT100_raspi_sequentmicrosystems_HAT started")
         return self.RTD_ADC.get_poly5(0, 6) # hard coding first layer, channel "RTD6". To be made configurable.
-
-
-class aht20:
-    def __init__(self):
-        import board
-        import adafruit_ahtx0
-        # self.bus = SMBus(1)
-        # self.sensor=adafruit_ahtx0.AHTx0(self.bus,address=0x38)
-        i2c = board.I2C()
-        self.sensor = adafruit_ahtx0.AHTx0(i2c)
-
-    def get_temperature(self):
-        logger.info("TemperatureMeasureBuildingBlock- aht20 started")
-        return self.sensor.temperature

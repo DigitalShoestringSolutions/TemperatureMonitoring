@@ -15,7 +15,6 @@
     #adc = "K-type_DFRobot_MAX31855"
 
     # Air temperature sensors:
-    #adc = "AHT20"
     #adc = "SHT30"
 
     # Infrared temperature sensors:

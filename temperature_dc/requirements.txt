@@ -12,7 +12,6 @@ bcr-libraries==0.0.4 # MCP3008 ADC HAT from BC Robotics
 # Specific sensors
 PyMLX90614==0.0.4                    # MLX90614 IR sensor
 w1thermsensor==2.0.0                 # one-wire sensor DS18B20
-adafruit-circuitpython-ahtx0==1.0.21 # AHT10 or AHT20 Humidity and Temperature Sensor
 
 # Other
 paho-mqtt==1.6.1 # publishing readings over MQTT
