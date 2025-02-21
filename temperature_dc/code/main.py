@@ -74,14 +74,6 @@ def start_building_blocks(bbs):
         p = bbs[key].start()
 
 
-def monitor_building_blocks(bbs):
-    while True:
-        time.sleep(1)
-        for key in bbs:
-            # logger.debug(f"{bbs[key].exitcode}, {bbs[key].is_alive()}")
-            # todo actually monitor
-            pass
-
 
 if __name__ == "__main__":
     config = get_config()
@@ -89,6 +81,5 @@ if __name__ == "__main__":
     if config_valid(config):
         bbs = create_building_blocks(config)
         start_building_blocks(bbs)
-        monitor_building_blocks(bbs)
     else:
         raise Exception("bad config")
