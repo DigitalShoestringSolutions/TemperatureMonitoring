@@ -4,12 +4,12 @@
 
 # Hardware interfaces
 pyserial==3.5        # for interfacing with arduino etc
-smbus2==0.4.3        # i2c sensors
+smbus2==0.5.0        # i2c sensors
 spidev==3.6          # spi sensors
 
 # Specific sensors
 PyMLX90614==0.0.4                    # MLX90614 IR sensor
-w1thermsensor==2.0.0                 # one-wire sensor DS18B20
+w1thermsensor==2.3.0                 # one-wire sensor DS18B20
 
 # Other
 paho-mqtt==1.6.1 # publishing readings over MQTT
