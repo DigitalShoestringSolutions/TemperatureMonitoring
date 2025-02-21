@@ -6,7 +6,6 @@
 pyserial==3.5        # for interfacing with arduino etc
 smbus2==0.4.3        # i2c sensors
 spidev==3.6          # spi sensors
-bcr-libraries==0.0.4 # MCP3008 ADC HAT from BC Robotics
 
 # Specific sensors
 PyMLX90614==0.0.4                    # MLX90614 IR sensor
