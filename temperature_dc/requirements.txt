@@ -1,13 +1,18 @@
-paho-mqtt==1.6.1
-chevron==0.14.0
-tomli==2.0.1
-pyzmq==25.1.1
-smbus2
-bcr-libraries
-spidev
-rpi.gpio
-PyMLX90614
-w1thermsensor
-adafruit-circuitpython-ahtx0
-board
-pyserial
+# Each dependency must by accompanied by a version number, stated as explicitly as possible
+# Else expect your work to fall apart when a dependency out of our control is updated!
+# Each dependency must by accompanied by a comment explaining why it is needed
+
+# Hardware interfaces
+pyserial==3.5        # for interfacing with arduino etc
+smbus2==0.5.0        # i2c sensors
+spidev==3.6          # spi sensors
+
+# Specific sensors
+PyMLX90614==0.0.4    # MLX90614 IR sensor
+w1thermsensor==2.3.0 # one-wire sensor DS18B20
+
+# Other
+paho-mqtt==1.6.1     # publishing readings over MQTT
+tomli==2.0.1         # parsing .toml config files
+pyzmq==25.1.1        # ZeroMQ for passing data between python threads
+chevron==0.14.0      # for rendering Mustache templating language in MQTT topics

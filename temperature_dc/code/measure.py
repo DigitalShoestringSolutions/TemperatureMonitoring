@@ -37,10 +37,7 @@ import logging
 import multiprocessing
 import time
 import sensor_select as sen
-import importlib
 import zmq
-import serial
-import json
 
 # logging.basicConfig(filename='/app_temp.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("main.measure") # applies a schema similar to above inherited from main's logger
@@ -99,10 +96,6 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
             sensor = sen.W1Therm()
         elif self.config['sensing']['adc'] == 'K-type_DFRobot_MAX31855':
             sensor = sen.k_type_DFRobot_MAX31855()
-        elif self.config['sensing']['adc'] == 'K-type_MAX6675':
-            sensor = sen.k_type_MAX6675()
-        elif self.config['sensing']['adc'] == 'AHT20':
-            sensor = sen.aht20()
         elif self.config['sensing']['adc'] == 'SHT30':
             sensor = sen.sht30()
         elif self.config['sensing']['adc'] == 'PT100_arduino':
