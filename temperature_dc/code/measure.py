@@ -127,7 +127,7 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
             # Collect samples from ADC
             try:
                 sample = sensor.get_temperature()
-                logger.debug("adding sample " + str(sample) + " to accululator")
+                logger.debug(f"adding sample {sample} to accululator")
                 sample_accumulator += sample
                 num_samples+=1
             except Exception as e:
@@ -146,7 +146,7 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
             # dispatch messages
             if num_samples >= self.sample_count:
                 average_sample = sample_accumulator / self.sample_count
-                logger.debug(f"average temperature_reading: {average_sample} from {num_samples} valid samples") # reading is part of full message, which is info logged below. Don't duplicate.
+                logger.debug(f"average temperature_reading {average_sample} from {num_samples} valid samples") # reading is part of full message, which is info logged below. Don't duplicate.
                 num_samples = 0
                 sample_accumulator = 0
 
