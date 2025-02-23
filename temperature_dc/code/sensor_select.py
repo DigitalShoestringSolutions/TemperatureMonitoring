@@ -156,9 +156,9 @@ class PT100_arduino:
 
 class PT100_raspi_MAX31865:
 
-    def __init__(self):
+    def __init__(self, spi_chip_select=1):
         import adc.MAX31865 as MAX31865
-        self.MyMax = MAX31865.max31865()
+        self.MyMax = MAX31865.max31865(spi_cs=spi_chip_select)
         self.MyMax.set_config(VBias=1, continous=1, filter50Hz=1)
         self.MyRTD = MAX31865.PT_RTD(100)
 

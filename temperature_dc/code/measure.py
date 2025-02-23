@@ -90,11 +90,12 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
         period = self.collection_interval
 
 
-        # Load user-set thresholds from the config file
+        # Load user-set thresholds and channel from the config file
         th_low = float(self.config['threshold']['low'])
         th_high = float(self.config['threshold']['high'])
+        channel = self.config['sensing'].get('channel', 1) # any device that has multiple channels will include a channel 1, even if zero indexed.
 
-
+        # Enable the selected sensor
         if self.config['sensing']['adc'] == 'MLX90614':
             sensor = sen.MLX90614()
         elif self.config['sensing']['adc'] == 'W1ThermSensor':
@@ -110,10 +111,9 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
         elif self.config['sensing']['adc'] == 'PT100_arduino':
             sensor = sen.PT100_arduino()
         elif self.config['sensing']['adc'] == 'PT100_raspi_MAX31865':
-            sensor = sen.PT100_raspi_MAX31865()
+            sensor = sen.PT100_raspi_MAX31865(spi_chip_select=channel) # channel is interpreted as chip select for MAX31865. 0 or 1.
         elif self.config['sensing']['adc'] == 'PT100_raspi_SMHAT':
             stack   = 0
-            channel = self.config['sensing'].get('channel', 1) # select which channel (1-8) to use from config file. Defaults to 1 if not set in config file.
             while channel > 8: # channels > 8 will be referred to higher up the stack (0-7). Allows for all 64 potential channels to be called from a single int.
                 stack   += 1   # allow large stack numbers, but >7 will fail at runtime.
                 channel -= 8
