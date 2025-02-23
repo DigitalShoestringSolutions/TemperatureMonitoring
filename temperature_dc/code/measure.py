@@ -40,10 +40,8 @@ import sensor_select as sen
 import zmq
 
 # logging.basicConfig(filename='/app_temp.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger("main.measure")
-logger.setLevel(logging.INFO)
-console_handler = logging.StreamHandler()
-logger.addHandler(console_handler)
+logger = logging.getLogger("main.measure") # applies a schema similar to above inherited from main's logger
+#logger.setLevel(logging.INFO) # log level is inherited from main's logger, unless it is overwritten here
 
 context = zmq.Context()
 
@@ -122,8 +120,7 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
             # Collect samples from ADC
             try:
                 sample = sensor.get_temperature()
-                # sample = sensor
-                logger.info("Prorcess TemperatureMeasureBuildingBlock- STAGE-3 done")
+                logger.debug(f"adding sample {sample} to accululator")
                 sample_accumulator += sample
                 num_samples+=1
             except Exception as e:
@@ -142,10 +139,9 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
             # dispatch messages
             if num_samples >= self.sample_count:
                 average_sample = sample_accumulator / self.sample_count
+                logger.debug(f"average temperature_reading {average_sample} from {num_samples} valid samples") # reading is part of full message, which is info logged below. Don't duplicate.
                 num_samples = 0
                 sample_accumulator = 0
-                print(average_sample)
-                logger.info(f"temperature_reading: {average_sample}")
 
                 # Compare against thresholds 
                 if average_sample > th_high:
@@ -159,12 +155,10 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
                 timestamp = datetime.datetime.now(tz=tz).isoformat()
 
                 # convert
-                # payload = {**results, **self.constants, "timestamp": timestamp}
                 payload = {"machine": self.constants['machine'], "temp": average_sample, "AlertVal": AlertVal, "ThresholdLow": th_low, "ThresholdHigh": th_high, "sensor": self.config['sensing']['adc'], "timestamp": timestamp}
 
                 # send
-                output = {"path": "", "payload": payload}
-                self.dispatch(output)
+                self.dispatch(payload)
 
             # handle sample rate
             if sleep_time <= 0:
@@ -173,8 +167,9 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
 
             sleep_time = t - time.time()
             time.sleep(max(0.0, sleep_time))
+
         logger.info("done")
 
-    def dispatch(self, output):
-        logger.info(f"dispatch to { output['path']} of {output['payload']}")
-        self.zmq_out.send_json({'path': output.get('path', ""), 'payload': output['payload']})
+    def dispatch(self, payload):
+        logger.info(payload)
+        self.zmq_out.send_json({'path': "", 'payload': payload})

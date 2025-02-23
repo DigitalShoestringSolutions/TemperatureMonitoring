@@ -63,10 +63,6 @@ def get_config(env_var="CONFIG_FILE", default_file_path="./config/config.toml"):
     return toml_conf
 
 
-def config_valid(config):
-    return True
-
-
 def create_building_blocks(config):
     bbs = {}
 
@@ -85,21 +81,10 @@ def start_building_blocks(bbs):
         p = bbs[key].start()
 
 
-def monitor_building_blocks(bbs):
-    while True:
-        time.sleep(1)
-        for key in bbs:
-            # logger.debug(f"{bbs[key].exitcode}, {bbs[key].is_alive()}")
-            # todo actually monitor
-            pass
-
 
 if __name__ == "__main__":
     config = get_config()
     # todo set logging level from config file
-    if config_valid(config):
-        bbs = create_building_blocks(config)
-        start_building_blocks(bbs)
-        monitor_building_blocks(bbs)
-    else:
-        raise Exception("bad config")
+    bbs = create_building_blocks(config)
+    start_building_blocks(bbs)
+
