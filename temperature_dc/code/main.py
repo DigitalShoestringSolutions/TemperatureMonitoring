@@ -37,6 +37,7 @@ import tomli
 import time
 import logging
 import zmq
+import os # for fetching environment variables
 # local
 import measure
 import wrapper
@@ -45,15 +46,21 @@ logger = logging.getLogger("main")
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')  # move to log config file using python functionality
 
 
-def get_config():
-    with open("./config/config.toml", "rb") as f:
+def get_config(env_var="CONFIG_FILE", default_file_path="./config/config.toml"):
+
+    # If an environment variable is set with the specified key, use it as the path to the config file
+    env_file_path = os.getenv(env_var) # returns None if env var not set
+    if env_file_path:
+        config_file_path = env_file_path
+    # If no such environment variable, failover to using specified string directly
+    else:
+        config_file_path = default_file_path
+
+    # Open the file, parse the contents as toml and return as dictionary
+    with open(config_file_path, "rb") as f:
         toml_conf = tomli.load(f)
     logger.info(f"config:{toml_conf}")
     return toml_conf
-
-
-def config_valid(config):
-    return True
 
 
 def create_building_blocks(config):
@@ -74,21 +81,10 @@ def start_building_blocks(bbs):
         p = bbs[key].start()
 
 
-def monitor_building_blocks(bbs):
-    while True:
-        time.sleep(1)
-        for key in bbs:
-            # logger.debug(f"{bbs[key].exitcode}, {bbs[key].is_alive()}")
-            # todo actually monitor
-            pass
-
 
 if __name__ == "__main__":
     config = get_config()
     # todo set logging level from config file
-    if config_valid(config):
-        bbs = create_building_blocks(config)
-        start_building_blocks(bbs)
-        monitor_building_blocks(bbs)
-    else:
-        raise Exception("bad config")
+    bbs = create_building_blocks(config)
+    start_building_blocks(bbs)
+
