@@ -125,7 +125,7 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
             # Collect samples from ADC
             try:
                 sample = sensor.get_temperature()
-                logger.debug(f"adding sample {sample} to accululator")
+                logger.debug(f"adding sample {sample} to accumulator")
                 sample_accumulator += sample
                 num_samples+=1
             except Exception as e:
