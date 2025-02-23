@@ -37,9 +37,7 @@ import logging
 import multiprocessing
 import time
 import sensor_select as sen
-import importlib
 import zmq
-import json
 
 # logging.basicConfig(filename='/app_temp.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("main.measure")
