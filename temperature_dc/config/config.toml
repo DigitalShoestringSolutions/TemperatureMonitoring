@@ -21,6 +21,10 @@
     # Infrared temperature sensors:
     #adc = "MLX90614"
 
+
+    # If your sensor supports multiple measurement channels, select one here:
+    channel = 1
+
 [sampling]
     sample_count = 1
     sample_interval = 1

@@ -38,7 +38,7 @@ class max31865:
 	REG_RTD_READING = 0x01
 
 
-	def __init__(self, R_Ref=438, spi_bus=0, spi_cs=0, spi_speed=7629, spi_clock_polarity=1, spi_clock_phase=1):
+	def __init__(self, R_Ref=438, spi_bus=0, spi_cs=1, spi_speed=7629, spi_clock_polarity=1, spi_clock_phase=1):
 
 		self.R_Ref = R_Ref	# ADC full scale. Ideally around 4*R_0dC. Our board's resistor is marked 431 => 430 ohms, but measuring it suggests 438.
 
