@@ -3,11 +3,11 @@
 #    Temperature Monitoring (Basic solution) -- This digital solution enables, measures,
 #    reports and records different  types of temperatures (contact, air, radiated)
 #    so that the temperature conditions surrounding a process can be understood and 
-#    taken action upon. Suppored sensors include 
+#    taken action upon. Supported sensors include 
 #    k-type thermocouples, RTDs, air samplers, and NIR-based sensors.
 #    The solution provides a Grafana dashboard that 
 #    displays the temperature timeseries, set threshold value, and a state timeline showing 
-#    the chnage in temperature. An InfluxDB database is used to store timestamp, temperature, 
+#    the change in temperature. An InfluxDB database is used to store timestamp, temperature, 
 #    threshold and status. 
 #
 #    Copyright (C) 2022  Shoestring and University of Cambridge
@@ -125,7 +125,7 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
             # Collect samples from ADC
             try:
                 sample = sensor.get_temperature()
-                logger.debug(f"adding sample {sample} to accululator")
+                logger.debug(f"adding sample {sample} to accumulator")
                 sample_accumulator += sample
                 num_samples+=1
             except Exception as e:

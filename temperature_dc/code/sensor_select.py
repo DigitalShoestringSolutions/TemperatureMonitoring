@@ -3,11 +3,11 @@
 #    Temperature Monitoring (Basic solution) -- This digital solution enables, measures,
 #    reports and records different  types of temperatures (contact, air, radiated)
 #    so that the temperature conditions surrounding a process can be understood and 
-#    taken action upon. Suppored sensors include 
+#    taken action upon. Supported sensors include 
 #    k-type thermocouples, RTDs, air samplers, and NIR-based sensors.
 #    The solution provides a Grafana dashboard that 
 #    displays the temperature timeseries, set threshold value, and a state timeline showing 
-#    the chnage in temperature. An InfluxDB database is used to store timestamp, temperature, 
+#    the change in temperature. An InfluxDB database is used to store timestamp, temperature, 
 #    threshold and status. 
 #
 #    Copyright (C) 2022  Shoestring and University of Cambridge
@@ -51,7 +51,6 @@ class k_type_DFRobot_MAX31855:
         self.I2C_1       = 0x01
         self.I2C_ADDRESS = 0x10
         #Create MAX31855 object
-        #self.max31855 = local_lib.DFRobot_MAX31855(self.I2C_1 ,self.I2C_ADDRESS)
         self.max31855 = DFRobot_MAX31855(self.I2C_1 ,self.I2C_ADDRESS)
 
 
@@ -133,7 +132,7 @@ class PT100_raspi_MAX31865:
         logger.debug("TemperatureMeasureBuildingBlock- PT100_raspi_MAX31865 created")
         import adc.MAX31865 as MAX31865
         self.MyMax = MAX31865.max31865(spi_cs=spi_chip_select)
-        self.MyMax.set_config(VBias=1, continous=1, filter50Hz=1)
+        self.MyMax.set_config(VBias=1, continuous=1, filter50Hz=1)
         self.MyRTD = MAX31865.PT_RTD(100)
 
     def get_temperature(self):

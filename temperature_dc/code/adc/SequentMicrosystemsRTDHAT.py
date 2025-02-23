@@ -81,7 +81,7 @@ def get_poly5(stack: int, channel: int) -> float:
 
     :param stack: 0-7, which hat to read
     :param channel: 1-8, which RTD to read on indicated hat
-    :return: temperature, in celcius
+    :return: temperature, in celsius
     """
 
     # coeffs for 5th order fit

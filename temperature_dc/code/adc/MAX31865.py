@@ -3,11 +3,11 @@
 #    Temperature Monitoring (Basic solution) -- This digital solution enables, measures,
 #    reports and records different  types of temperatures (contact, air, radiated)
 #    so that the temperature conditions surrounding a process can be understood and 
-#    taken action upon. Suppored sensors include 
+#    taken action upon. Supported sensors include 
 #    k-type thermocouples, RTDs, air samplers, and NIR-based sensors.
 #    The solution provides a Grafana dashboard that 
 #    displays the temperature timeseries, set threshold value, and a state timeline showing 
-#    the chnage in temperature. An InfluxDB database is used to store timestamp, temperature, 
+#    the change in temperature. An InfluxDB database is used to store timestamp, temperature, 
 #    threshold and status. 
 #
 #    Copyright (C) 2022  Shoestring and University of Cambridge
@@ -89,12 +89,12 @@ class max31865:
 
 
 
-	def set_config(self, VBias=0, continous=0, oneshot=0, threewire=0, faultdetect=0, faultclear=0, filter50Hz=0):
+	def set_config(self, VBias=0, continuous=0, oneshot=0, threewire=0, faultdetect=0, faultclear=0, filter50Hz=0):
 		"""
 		Overwrite the config register:
 		---------------
 		bit 7: Vbias (1=ON, 0=OFF). Needs to be on in either mode to get new readings.
-		bit 6: Conversion Mode (1=Auto/Continous, 0=OFF/Manual)
+		bit 6: Conversion Mode (1=Auto/Continuous, 0=OFF/Manual)
 		bit 5: 1-shot (1=1-shot on, auto cleared)
 		bit 4: 3-wire select (1=3 wire config, 0=2 or 4 wire config)
 		bits 3-2: fault detection cycle (0=none, otherwise see data sheet)
@@ -102,7 +102,7 @@ class max31865:
 		bit 0: 50/60 Hz filter select (1=50Hz, 0=60Hz)
 		"""
 
-		new_config_byte = (VBias << 7 | continous << 6 | oneshot << 5 | threewire << 4 | faultdetect << 2 | faultclear << 1 | filter50Hz)
+		new_config_byte = (VBias << 7 | continuous << 6 | oneshot << 5 | threewire << 4 | faultdetect << 2 | faultclear << 1 | filter50Hz)
 		self._write_reg(self.REG_CONFIG_WRITE, new_config_byte)
 
 
@@ -176,9 +176,9 @@ if __name__ == '__main__':
 		time.sleep(1)
 	time.sleep(1)
 
-	# test in continous mode
-	print("continous mode:")
-	MyMax.set_config(VBias=1, continous=1, filter50Hz=1)
+	# test in continuous mode
+	print("continuous mode:")
+	MyMax.set_config(VBias=1, continuous=1, filter50Hz=1)
 	time.sleep(0.5)
 
 	for i in range(5):
