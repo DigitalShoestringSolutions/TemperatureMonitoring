@@ -49,18 +49,18 @@ services:
             - "mqtt_broker"
  
    
-    temperature-collection:
+    temperature-sensing:
         extends:
-            file: temperature_dc/app.yml
+            file: temperature_sensing/app.yml
             service: app
         networks:
             internal:
                 aliases:
-                    - temperature-dc.docker.local
+                    - temperature-sensing.docker.local
         logging:
             driver: syslog
             options:
-                tag: docker-temperature-dc
+                tag: docker-temperature-sensing
         restart: unless-stopped
         depends_on:
             - "mqtt_broker"
