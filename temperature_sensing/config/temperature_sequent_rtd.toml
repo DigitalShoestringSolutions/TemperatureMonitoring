@@ -47,15 +47,13 @@
     n_samples = 5
 [[measurement.sensing_stacks]]
     device = "adc_0"
-    pipeline = "single_clamp"
-    constants = {'phase'='single'}
+    pipeline = "single_rtd"              # Why is this in quotes? It's not in quotes when defined above
 
 [output.overall]
-    topic = "power_monitoring/{{machine}}/{{phase}}"
+    topic = "temperature_monitoring/{{machine}}"
 [output.overall.message_spec]
     timestamp = '$.timestamp'
-    current = "$.current_rms"
-    phase = "$.phase"
+    temperature = "$.temperature"        # What's with the $ ? Wasn't needed when specifying variables off the blackboard before
     machine="$.machine"
 
 
