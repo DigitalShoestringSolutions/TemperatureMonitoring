@@ -1,14 +1,8 @@
 #   Select the config file (by removing the leading #) appropriate for your hardware and wiring setup
-#
-#module_config_file = "./config/pm_b_1p_sequent.toml"           # Single phase with Sequent 16 channel Universal Inputs ADC
-#module_config_file = "./config/pm_dc_gravity_ads1115.toml"     # Gravity DC current sensor connected to ADS1115 ADC
-#
-#module_config_file = "./config/pm_b_3pu_mock.toml"              #   Simulator for testing without sensing hardware
+module_config_file = "./config/temperature_sequent_rtd.toml"
 
-
-#   Set the machine name
+# Set the machine name
 calculation.machine_name.config.machine = "Machine_Name_Here"
 
-
-# Set which ADC channel the clamp is plugged into.
-#device.adc_0.config.adc_channel = 0
+# Set which channel the RTD is plugged into.
+device.adc_0.config.channel = 1

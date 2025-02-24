@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 class Sequent_8ch_RTD_HAT:
 
     def __init__(self, config, variables):
-        self.channel = config.get('channel')            # No default value here, must be configured
+        self.channel = config.get('channel')                # No default value here, must be configured
         self.i2c_address = config.get('i2c_address',0x40)   # Use stack number? In the case of this HAT, that is as simple as just 0x40 + stack
         self.i2c = None                                     # Interface created in initialise()
         self.channel_mask = 8                               # maximum valid channel number
