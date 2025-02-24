@@ -6,6 +6,8 @@ jsonpath-rw==1.4.0
 packaging==23.2 
 jsonschema[format-nongpl]==4.21.1 
 
+# Device-dependent libraries such as below are dynamically installed during docker build
+# Hence they do not need to be specified here.
 # smbus2==0.4.3
 # spidev==3.6
 # pyserial==3.5
