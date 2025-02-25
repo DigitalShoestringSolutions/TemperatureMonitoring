@@ -13,3 +13,7 @@
 
 ## Usage
 - View Grafana dashboards in a web browser: `localhost:3000`
+
+![image](https://github.com/user-attachments/assets/9dea8caa-bda7-4346-acd1-3986690e0fa0)
+
+![image](https://github.com/user-attachments/assets/69de3981-7052-4c5a-8fa3-dbcfbaf81ec5)
