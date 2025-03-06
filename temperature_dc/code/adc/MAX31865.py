@@ -27,7 +27,6 @@
 # ----------------------------------------------------------------------
 
 import spidev
-from math import sqrt
 import time
 
 class max31865:
@@ -119,53 +118,16 @@ class max31865:
 		return R_RTD
 
 
-class PT_RTD:
-
-	def __init__(self, R_0dC, a=3.9083e-3, b=-5.775e-7, c_pos=0, c_neg=-4.18301e-12):
-
-		self.R_0dC = R_0dC	# The RTD resistance at 0 degrees C. Common standards are 100 and 1000.
-
-		# A great model of PT-RTD resistance vs temperature is the Callendar-Van Dusen equation:
-		# R_RTD = R_0dC * (1 + a*T + b*T**2 + c*(T-100)*T**3)
-		# Standard constants (IEC7751/SAMA) as default
-
-		self.a = a
-		self.b = b
-		self.c_pos = c_pos	# For temperatures above 0 degrees C
-		self.c_neg = c_neg	# For temperatures below 0 degrees C
-
-
-	def __call__(self, resistance):
-		"""shorthand for most common usage"""
-		return self.calculate_temperature_quadratic(resistance)
-
-
-	def calculate_temperature_linear(self, resistance):
-
-		# Linear approximation:
-		T_C_linear = ((resistance / self.R_0dC) - 1) / self.a
-		return T_C_linear
-
-	def calculate_temperature_quadratic(self, resistance):
-
-		# Quadratic approximation (unfortunately the constants do not follow convention):
-		# R_RTD / R_0dC = 1 + aT + bt^2
-		# T = (-a +- sqrt(a^2-4b(1-R_RTD/R_0dC))) / 2b
-		T_C_quadratic = ( -self.a + sqrt((self.a**2)-4*self.b*(1-(resistance/self.R_0dC))) )/(2*self.b)
-		return T_C_quadratic
-
-#	def calculate_temperature_quartic(self, resistance):
-		# Full Callendar-Van Dussen, improves on quad below 0dC.
-		# tbd
-
 
 # test
 if __name__ == '__main__':
+    
+	import models.pt_rtd
+	MyRTD = models.pt_rtd.PT_RTD(100)
 
 	MyMax = max31865()
 	MyMax.set_config(VBias=1, filter50Hz=1)
 	time.sleep(0.5)
-	MyRTD = PT_RTD(100)
 
 	# test in oneshot mode
 	print("oneshot mode:")

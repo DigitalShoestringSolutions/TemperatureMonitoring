@@ -37,7 +37,7 @@ import time
 #import adc.MAX31865                        # imported below when class is created
 #import adc.DFRobot_MAX31855                # imported below when class is created
 #import adc.SequentMicrosystemsRTDHAT       # imported below when class is created
-
+#import models.pt_rtd                       # imported below when class is created
 
 logger = logging.getLogger("main.measure.sensor")
 
@@ -130,14 +130,17 @@ class PT100_arduino:
 class PT100_raspi_MAX31865:
     def __init__(self, spi_chip_select=1):
         logger.debug("TemperatureMeasureBuildingBlock- PT100_raspi_MAX31865 created")
-        import adc.MAX31865 as MAX31865
-        self.MyMax = MAX31865.max31865(spi_cs=spi_chip_select)
+        import adc.MAX31865
+        import models.pt_rtd
+        self.MyMax = adc.MAX31865.max31865(spi_cs=spi_chip_select)
         self.MyMax.set_config(VBias=1, continuous=1, filter50Hz=1)
-        self.MyRTD = MAX31865.PT_RTD(100)
+        self.MyRTD = models.pt_rtd.PT_RTD(100) # Create RTD model instance. Unfortunately config is not exposed here to select 100 ohm or 1000 ohm
 
     def get_temperature(self):
         logger.debug("TemperatureMeasureBuildingBlock- PT100_raspi_MAX31865 started")
-        return self.MyRTD(self.MyMax())
+        resistance = self.MyMax()
+        logger.debug(f"MAX31864 reported RTD resistance as {resistance}")
+        return self.MyRTD(resistance) # no need to log temperature as each sample is debug logged in measure.py
 
     def close(self):
         self.MyMax.spi.close()
@@ -147,11 +150,15 @@ class PT100_raspi_MAX31865:
 class PT100_raspi_sequentmicrosystems_HAT:
     def __init__(self, stack=0, channel=1):
         logger.debug("TemperatureMeasureBuildingBlock- PT100_raspi_sequentmicrosystems_HAT created")
-        import adc.SequentMicrosystemsRTDHAT as RTDHAT
-        self.RTD_ADC = RTDHAT
+        import adc.SequentMicrosystemsRTDHAT
+        import models.pt_rtd
+        self.RTD_ADC = adc.SequentMicrosystemsRTDHAT # no class, just get() and getRes() sampling functions
         self.channel = channel # 1-8
         self.stack = stack     # 0-7
+        self.MyRTD = models.pt_rtd.PT_RTD(100) # Sequent RTD HAT only supports 100 ohm
 
     def get_temperature(self):
         logger.debug("TemperatureMeasureBuildingBlock- PT100_raspi_sequentmicrosystems_HAT started on stack " + str(self.stack) + " channel " + str(self.channel))
-        return self.RTD_ADC.get_poly5(self.stack, self.channel)
+        resistance = self.RTD_ADC.getRes(self.stack, self.channel)
+        logger.debug(f"Sequent reported RTD resistance as {resistance}")
+        return self.MyRTD(resistance) # no need to log temperature as each sample is debug logged in measure.py
