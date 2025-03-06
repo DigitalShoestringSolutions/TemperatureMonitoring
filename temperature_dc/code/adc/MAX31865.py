@@ -41,6 +41,12 @@ class max31865:
 
 		self.R_Ref = R_Ref	# ADC full scale. Ideally around 4*R_0dC. Product we recommend is specified to have a 430Ω 0.1% resistor.
 
+		# validate channel
+		if not isinstance(spi_cs, int):
+			raise TypeError("channel is interpreted as chip select for MAX31865. Must be an integer. Received " + str(spi_cs) + ", a " + str(type(spi_cs)) +", from config")
+        if spi_cs < 0 or > 1:
+            raise ValueError("channel is interpreted as chip select for MAX31865. Must be 0 or 1. Received " + str(spi_cs)")
+
 		self.spi = spidev.SpiDev()
 		self.spi.open(spi_bus, spi_cs)
 		self.spi.max_speed_hz = spi_speed
