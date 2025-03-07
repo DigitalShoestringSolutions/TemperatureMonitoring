@@ -139,7 +139,7 @@ class PT100_raspi_MAX31865:
     def get_temperature(self):
         logger.debug("TemperatureMeasureBuildingBlock- PT100_raspi_MAX31865 started")
         resistance = self.MyMax()
-        logger.debug(f"MAX31864 reported RTD resistance as {resistance}")
+        logger.debug(f"MAX31865 reported RTD resistance as {resistance}")
         return self.MyRTD(resistance) # no need to log temperature as each sample is debug logged in measure.py
 
     def close(self):
