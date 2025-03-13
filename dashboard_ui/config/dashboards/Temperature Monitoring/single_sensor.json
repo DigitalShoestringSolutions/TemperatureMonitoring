@@ -21,6 +21,7 @@
       }
     ]
   },
+  "description": "",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
@@ -59,7 +60,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": 10000,
+            "spanNulls": 60000,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -110,21 +111,6 @@
                 "id": "color",
                 "value": {
                   "fixedColor": "semi-dark-blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Incubator"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "semi-dark-green",
                   "mode": "fixed"
                 }
               }
@@ -233,34 +219,13 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "dark-blue",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 0
-              },
-              {
                 "color": "dark-green",
-                "value": 1
+                "value": null
               }
             ]
           }
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "AlertVal"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Alert Status"
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 9,
@@ -310,7 +275,7 @@
           "custom": {
             "fillOpacity": 70,
             "lineWidth": 0,
-            "spanNulls": 10000
+            "spanNulls": 60000
           },
           "mappings": [],
           "thresholds": {
@@ -513,8 +478,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Temperature_starter_solution",
+  "title": "Single Sensor",
   "uid": "70aiGq34k",
-  "version": 6,
+  "version": 4,
   "weekStart": ""
 }

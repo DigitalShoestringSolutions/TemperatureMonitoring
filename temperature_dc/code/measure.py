@@ -3,11 +3,11 @@
 #    Temperature Monitoring (Basic solution) -- This digital solution enables, measures,
 #    reports and records different  types of temperatures (contact, air, radiated)
 #    so that the temperature conditions surrounding a process can be understood and 
-#    taken action upon. Suppored sensors include 
+#    taken action upon. Supported sensors include 
 #    k-type thermocouples, RTDs, air samplers, and NIR-based sensors.
 #    The solution provides a Grafana dashboard that 
 #    displays the temperature timeseries, set threshold value, and a state timeline showing 
-#    the chnage in temperature. An InfluxDB database is used to store timestamp, temperature, 
+#    the change in temperature. An InfluxDB database is used to store timestamp, temperature, 
 #    threshold and status. 
 #
 #    Copyright (C) 2022  Shoestring and University of Cambridge
@@ -37,16 +37,11 @@ import logging
 import multiprocessing
 import time
 import sensor_select as sen
-import importlib
 import zmq
-import serial
-import json
 
 # logging.basicConfig(filename='/app_temp.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger("main.measure")
-logger.setLevel(logging.INFO)
-console_handler = logging.StreamHandler()
-logger.addHandler(console_handler)
+logger = logging.getLogger("main.measure") # applies a schema similar to above inherited from main's logger
+#logger.setLevel(logging.INFO) # log level is inherited from main's logger, unless it is overwritten here
 
 context = zmq.Context()
 
@@ -90,29 +85,30 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
         period = self.collection_interval
 
 
-        # Load user-set thresholds from the config file
+        # Load user-set thresholds and channel from the config file
         th_low = float(self.config['threshold']['low'])
         th_high = float(self.config['threshold']['high'])
+        channel = self.config['sensing'].get('channel', 1) # any device that has multiple channels will include a channel 1, even if zero indexed.
 
-
+        # Enable the selected sensor
         if self.config['sensing']['adc'] == 'MLX90614':
             sensor = sen.MLX90614()
         elif self.config['sensing']['adc'] == 'W1ThermSensor':
             sensor = sen.W1Therm()
         elif self.config['sensing']['adc'] == 'K-type_DFRobot_MAX31855':
             sensor = sen.k_type_DFRobot_MAX31855()
-        elif self.config['sensing']['adc'] == 'K-type_MAX6675':
-            sensor = sen.k_type_MAX6675()
-        elif self.config['sensing']['adc'] == 'AHT20':
-            sensor = sen.aht20()
         elif self.config['sensing']['adc'] == 'SHT30':
             sensor = sen.sht30()
         elif self.config['sensing']['adc'] == 'PT100_arduino':
             sensor = sen.PT100_arduino()
         elif self.config['sensing']['adc'] == 'PT100_raspi_MAX31865':
-            sensor = sen.PT100_raspi_MAX31865()
+            sensor = sen.PT100_raspi_MAX31865(spi_chip_select=channel) # channel is interpreted as chip select for MAX31865. 0 or 1.
         elif self.config['sensing']['adc'] == 'PT100_raspi_SMHAT':
-            sensor = sen.PT100_raspi_sequentmicrosystems_HAT()
+            stack   = 0
+            while channel > 8: # channels > 8 will be referred to higher up the stack (0-7). Allows for all 64 potential channels to be called from a single int.
+                stack   += 1   # allow large stack numbers, but >7 will fail at runtime.
+                channel -= 8
+            sensor = sen.PT100_raspi_sequentmicrosystems_HAT(stack, channel)
 
         else:
             raise Exception(f'ADC "{self.config["sensing"]["adc"]}" not recognised/supported')
@@ -129,8 +125,7 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
             # Collect samples from ADC
             try:
                 sample = sensor.get_temperature()
-                # sample = sensor
-                logger.info("Prorcess TemperatureMeasureBuildingBlock- STAGE-3 done")
+                logger.debug(f"adding sample {sample} to accumulator")
                 sample_accumulator += sample
                 num_samples+=1
             except Exception as e:
@@ -149,10 +144,9 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
             # dispatch messages
             if num_samples >= self.sample_count:
                 average_sample = sample_accumulator / self.sample_count
+                logger.debug(f"average temperature_reading {average_sample} from {num_samples} valid samples") # reading is part of full message, which is info logged below. Don't duplicate.
                 num_samples = 0
                 sample_accumulator = 0
-                print(average_sample)
-                logger.info(f"temperature_reading: {average_sample}")
 
                 # Compare against thresholds 
                 if average_sample > th_high:
@@ -166,12 +160,10 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
                 timestamp = datetime.datetime.now(tz=tz).isoformat()
 
                 # convert
-                # payload = {**results, **self.constants, "timestamp": timestamp}
                 payload = {"machine": self.constants['machine'], "temp": average_sample, "AlertVal": AlertVal, "ThresholdLow": th_low, "ThresholdHigh": th_high, "sensor": self.config['sensing']['adc'], "timestamp": timestamp}
 
                 # send
-                output = {"path": "", "payload": payload}
-                self.dispatch(output)
+                self.dispatch(payload)
 
             # handle sample rate
             if sleep_time <= 0:
@@ -180,8 +172,9 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
 
             sleep_time = t - time.time()
             time.sleep(max(0.0, sleep_time))
+
         logger.info("done")
 
-    def dispatch(self, output):
-        logger.info(f"dispatch to { output['path']} of {output['payload']}")
-        self.zmq_out.send_json({'path': output.get('path', ""), 'payload': output['payload']})
+    def dispatch(self, payload):
+        logger.info(payload)
+        self.zmq_out.send_json({'path': "", 'payload': payload})

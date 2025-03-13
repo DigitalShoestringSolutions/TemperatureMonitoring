@@ -13,7 +13,6 @@ import time
 import smbus2
 import os
 import math
-import RPi.GPIO as GPIO
 
 class DFRobot_MAX31855:
   '''
