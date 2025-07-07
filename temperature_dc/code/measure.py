@@ -94,7 +94,7 @@ class TemperatureMeasureBuildingBlock(multiprocessing.Process):
         if self.config['sensing']['adc'] == 'MLX90614':
             sensor = sen.MLX90614()
         elif self.config['sensing']['adc'] == 'W1ThermSensor':
-            sensor = sen.W1Therm()
+            sensor = sen.W1Therm(channel)
         elif self.config['sensing']['adc'] == 'K-type_DFRobot_MAX31855':
             sensor = sen.k_type_DFRobot_MAX31855()
         elif self.config['sensing']['adc'] == 'SHT30':
