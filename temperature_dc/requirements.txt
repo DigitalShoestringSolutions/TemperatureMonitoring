@@ -14,5 +14,5 @@ w1thermsensor==2.3.0 # one-wire sensor DS18B20
 # Other
 paho-mqtt==1.6.1     # publishing readings over MQTT
 tomli==2.0.1         # parsing .toml config files
-pyzmq==25.1.1        # ZeroMQ for passing data between python threads
+pyzmq==27.0.1        # ZeroMQ for passing data between python threads
 chevron==0.14.0      # for rendering Mustache templating language in MQTT topics
