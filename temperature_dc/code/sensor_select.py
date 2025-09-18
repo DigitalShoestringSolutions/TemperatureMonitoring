@@ -97,7 +97,10 @@ class W1Therm:
         logger.debug("TemperatureMeasureBuildingBlock- w1therm created")
         from w1thermsensor import W1ThermSensor
         all_sensors_on_bus = W1ThermSensor.get_available_sensors()
-        self.sensor = all_sensors_on_bus[channel - 1] # Accept channel numbers starting at 1 for consistency. Map to zero-indexed list.
+        if len(all_sensors_on_bus) == 0:
+            raise IndexError("No DS18B20 sensors found connected to GPIO4 (physical pin 7). Please check your cabling and pullup resistors.")
+        else:
+            self.sensor = all_sensors_on_bus[channel - 1] # Accept channel numbers starting at 1 for consistency. Map to zero-indexed list.
 
 
     def get_temperature(self):
