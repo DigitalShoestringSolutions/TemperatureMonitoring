@@ -22,181 +22,59 @@
 #       opt.<next_value> = "<next_option_text>"  
 
 
+
 [Q.machine_name]
   type = "text"
   prompt = "Choose a name for this machine"
 
-[Q.variant]
+[Q.sensor_type]
   type = "select"
-  prompt = "Which power monitoring variant are you deploying"
-  opt.basic = "basic"
-  opt.intermediate = "intermediate"
-  opt.advanced = "advanced"
+  prompt = "Which type of temperature sensor are you using"
+  opt.rtd = "RTD"
+  opt.thermocouple = "Thermocouple"
+  opt.ir = "Infrared"
   opt.simulator = "simulator"
 
-[Q.adc]
-  criteria = "variant=basic"
+[Q.rtd_amplifier]
+  criteria = "sensor_type=rtd"
   type = "select"
-  prompt = "Which ADC are you using"
-  opt.grove_1 = "Grove ADC v1.0"
-  opt.grove_11 = "Grove ADC v1.1"
-  opt.ads = "ADS1115"
-  opt.bcr = "BC Robotics"
-  opt.sequent = "Sequent 16 channel Universal Inputs ADC"
+  prompt = "Which RTD amplifier are you using"
+  opt.sequent = "Sequent 8 channel RTD DAQ HAT"
 
-[Q.setup_basic]
-  criteria = "variant=basic"
+[Q.ir_sensor]
+  criteria = "sensor_type=ir"
   type = "select"
-  prompt = "Which sensing configuration are you using"
-  opt.single = "Single phase"
-  opt.3b = "Three phase balanced (single clamp)"
-  opt.3u = "Three phase unbalanced"
-  opt.dc = "Gravity DC current sensor" 
+  prompt = "Which IR temperature sensor are you using"
+  opt.mlx90614 = "MLX90614"
 
-[Q.clamp_rating]
-  criteria = "variant=basic"
+[Q.channel]
+  criteria = "rtd_amplifier=sequent"
   type = "text"
-  prompt = "What is the rating of the current clamp being used"
+  prompt = "Which channel is the RTD plugged into?"
 
-[Q.setup_int]
-  criteria = "variant=intermediate"
-  type = "select"
-  prompt = "How many phases are you monitoring"
-  opt.1p = "single phase"
-  opt.3p = "three phase"
-
-[Q.setup_adv]
-  criteria = "variant=advanced"
-  type = "select"
-  prompt = "How many phases are you monitoring"
-  opt.1p = "single"
-  option.3p = "three"  
-
-[Q.adc_channel_0]
-  criteria = "variant=basic"
-  type = "text"
-  prompt = "Which ADC channel is the first current clamp plugged into"
-
-[Q.adc_channel_1]
-  criteria = "variant=basic&setup_basic=3u"
-  type = "text"
-  prompt = "Which ADC channel is the second current clamp plugged into"
-
-[Q.adc_channel_2]
-  criteria = "variant=basic&setup_basic=3u"
-  type = "text"
-  prompt = "Which ADC channel is the third current clamp plugged into"
 
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=simulator"
-  value = "pm_b_3pu_mock.toml"
+  criteria = "sensor_type=simulator"
+  value = "temperature_mock.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=grove_1&setup_basic=single"
-  value = "pm_b_1p_grove_v1.0.toml"
+  criteria = "sensor_type=rtd&rtd_amplifier=sequent"
+  value = "temperature_rtd_sequent.toml"
 
 [[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=grove_1&setup_basic=3b"
-  value = "pm_b_3pb_grove_v1.0.toml"
+  criteria = "sensor_type=ir&ir_sensor=mlx90614"
+  value = "temperature_ir_mlx90614.toml"
 
-[[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=grove_1&setup_basic=3u"
-  value = "pm_b_3pu_grove_v1.0.toml"
 
-[[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=grove_1&setup_basic=dc"
-  value = "pm_dc_gravity_grove_v1.0.toml"
-
-[[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=grove_11&setup_basic=single"
-  value = "pm_b_1p_grove_v1.1.toml"  
-
-[[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=grove_11&setup_basic=3b"
-  value = "pm_b_3pb_grove_v1.1.toml" 
-
-[[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=grove_11&setup_basic=3u"
-  value = "pm_b_3pu_grove_v1.1.toml" 
-
-[[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=grove_11&setup_basic=dc"
-  value = "pm_dc_gravity_grove_v1.1.toml"
-
-[[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=ads&setup_basic=single"
-  value = "pm_b_1p_ads1115.toml"
-
-[[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=ads&setup_basic=3b"
-  value = "pm_b_3pb_ads1115.toml"  
-
-[[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=ads&setup_basic=3u"
-  value = "pm_b_3pu_ads1115.toml"
-
-[[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=ads&setup_basic=dc"
-  value = "pm_dc_gravity_ads1115.toml"
-
-[[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=bcr&setup_basic=single"
-  value = "pm_b_1p_bc_robotics.toml"
-
-[[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=bcr&setup_basic=3b"
-  value = "pm_b_3pb_bc_robotics.toml"
-
-[[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=bcr&setup_basic=3u"
-  value = "pm_b_3pu_bc_robotics.toml" 
-
-[[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=bcr&setup_basic=dc"
-  value = "pm_dc_gravity_bc_robotics.toml"
-[[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=sequent&setup_basic=single"
-  value = "pm_b_1p_sequent.toml"
-
-[[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=sequent&setup_basic=3b"
-  value = "pm_b_3pb_sequent.toml"
-
-[[OUT.module_config_file.map]]
-  criteria = "variant=basic&adc=sequent&setup_basic=3u"
-  value = "pm_b_3pu_sequent.toml"
-
-[[OUT.module_config_file.map]]
-  criteria = "variant=intermediate&setup_int=1p"
-  value = "pm_i_1p.toml"
-
-[[OUT.module_config_file.map]]
-  criteria = "variant=intermediate&setup_int=3p"
-  value = "pm_i_3p.toml"
-
-[[OUT.module_config_file.map]]
-  criteria = "variant=advanced&setup_adv=1p"
-  value = "pm_a_1p.toml" 
-
-[[OUT.module_config_file.map]]
-  criteria = "variant=advanced&setup_adv=3p"
-  value = "pm_a_3p.toml"
 
 [OUT.machine_name]
   var = "machine_name"
 
-[OUT.clamp_rating]
-  var = "clamp_rating"
+[OUT.channel]
+  var = "channel" 
 
-[OUT.adc_channel_0]
-  var = "adc_channel_0" 
 
-[OUT.adc_channel_1]  
-  var = "adc_channel_1"
-
-[OUT.adc_channel_2]
-  var = "adc_channel_2"
 
 # Note: The following lines are examples of how to reference the answers in the user configuration template.
 # For example, in user_config.toml, you can use {{machine_name}} to insert the machine name provided by the user.

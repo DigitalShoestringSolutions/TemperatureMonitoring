@@ -1,0 +1,64 @@
+#=-= Define Interface Modules =-=
+[interface.i2c0]
+    module="i2c"
+    class="I2C"
+[interface.i2c0.config]
+    bus=1
+
+
+#=-= Define Device Modules =-=
+[device.sensor]
+    module="temperature_ir_mlx90614"     # device_modules / file name
+    class="MLX90614"
+    interface="i2c0"
+[device.sensor.variables]
+    object_temperature = "temperature"   # Key required by device module class. Latter value is blackboard name.
+
+
+#=-= Define Calculation Modules =-=
+[calculation.machine_name]
+    module="gen_constants"
+    class="ConstantSet"                  # Is all this required just to tag the data with the machine name?
+[calculation.machine_name.config]
+    machine = "Machine_1"                # Default unless overwritten in user config (which it always will be?)
+[calculation.machine_name.variables]     # no variables, as this ...thing... doesn't pull or push any data to the blackboard
+
+
+#=-= Define Calculation Pipelines =-=
+[pipelines]
+    pipeline = ["machine_name"]
+
+
+#=-= Define Measurements Pipelines =-=
+[measurement]
+    module="gen_sample"
+    class="SingleSampleAvg"
+[measurement.config]
+    period = 1.0 # seconds
+    n_samples = 5
+[[measurement.sensing_stacks]]
+    device = "adc_0"
+    pipeline = "pipeline"              # Why is this in quotes? It's not in quotes when defined above
+
+[output.overall]
+    topic = "temperature_monitoring/{{machine}}"
+[output.overall.message_spec]
+    timestamp = '$.timestamp'
+    temp = "$.temperature"               # What's with the $ ? Wasn't needed when specifying variables off the blackboard before
+    machine="$.machine"
+
+
+[mqtt]
+    broker = "mqtt.docker.local"
+    port = 1883   #common mqtt ports are 1883 and 8883
+    topic_prefix = ""
+
+    #reconnection characteristics
+    # start: timeout = initial,
+    # if timeout < limit then
+    #   timeout = timeout*backoff
+    # else
+    #   timeout = limit
+    reconnect.initial = 5 # seconds
+    reconnect.backoff = 2 # multiplier
+    reconnect.limit = 60 # seconds

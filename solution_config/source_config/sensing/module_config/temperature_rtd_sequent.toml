@@ -1,0 +1,73 @@
+#=-= Define Interface Modules =-=
+[interface.i2c0]
+    module="i2c"
+    class="I2C"
+[interface.i2c0.config]
+    bus=1
+
+
+#=-= Define Device Modules =-=
+[device.adc_0]
+    module="rtd_sequentmicrosystems_hat" # device_modules / file name
+    class="Sequent_8ch_RTD_HAT"
+    interface="i2c0"
+[device.adc_0.variables]
+    PT_RTD_resistance = "resistance"     # Key required by device module class. Latter value is blackboard name.
+
+
+#=-= Define Calculation Modules =-=
+[calculation.machine_name]
+    module="gen_constants"
+    class="ConstantSet"                  # Is all this required just to tag the data with the machine name?
+[calculation.machine_name.config]
+    machine = "Machine_1"                # Default unless overwritten in user config (which it always will be?)
+[calculation.machine_name.variables]     # no variables, as this ...thing... doesn't pull or push any data to the blackboard
+
+[calculation.amplifier]
+    module="gen_pt_rtd"
+    class="PT_RTD"
+[calculation.amplifier.config]
+    nominal_resistance = 100             # ohms at 0 degrees. Optional here, defaults to 100.
+[calculation.amplifier.variables]
+    temperature = "temperature"          # Are these lines really required?
+    resistance = "resistance"            # These are set as defaults on py dict loading so should be optional
+
+
+#=-= Define Calculation Pipelines =-=
+[pipelines]
+    single_rtd = ["amplifier","machine_name"]
+
+
+#=-= Define Measurements Pipelines =-=
+[measurement]
+    module="gen_sample"
+    class="SingleSampleAvg"
+[measurement.config]
+    period = 1.0 # seconds
+    n_samples = 5
+[[measurement.sensing_stacks]]
+    device = "adc_0"
+    pipeline = "single_rtd"              # Why is this in quotes? It's not in quotes when defined above
+
+[output.overall]
+    topic = "temperature_monitoring/{{machine}}"
+[output.overall.message_spec]
+    timestamp = '$.timestamp'
+    temp = "$.temperature"        # What's with the $ ? Wasn't needed when specifying variables off the blackboard before
+    machine="$.machine"
+
+
+[mqtt]
+    broker = "mqtt.docker.local"
+    port = 1883   #common mqtt ports are 1883 and 8883
+    topic_prefix = ""
+
+    #reconnection characteristics
+    # start: timeout = initial,
+    # if timeout < limit then
+    #   timeout = timeout*backoff
+    # else
+    #   timeout = limit
+    reconnect.initial = 5 # seconds
+    reconnect.backoff = 2 # multiplier
+    reconnect.limit = 60 # seconds
