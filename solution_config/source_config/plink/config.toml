@@ -1,7 +1,5 @@
-solution_type = "solution_name_slug"
-solution_version = "v1.0.0"
-# Is there any way the above could be extracted from the solution's top level recipe.toml?
-# If not it will be hard to keep manually consistent.
+solution_type = "temperature_monitoring"
+solution_version = "v2.0.0"
 
 # These are the defaults for these settings.
 # they can be modified using the control panel 
