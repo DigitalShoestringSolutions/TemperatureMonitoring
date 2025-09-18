@@ -48,7 +48,7 @@
   opt.mlx90614 = "MLX90614"
 
 [Q.channel]
-  criteria = "rtd_amplifier=sequent"
+  criteria = "sensor_type=rtd&rtd_amplifier=sequent"
   type = "text"
   prompt = "Which channel is the RTD plugged into?"
 
