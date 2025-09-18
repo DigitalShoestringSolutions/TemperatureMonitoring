@@ -7,4 +7,4 @@ calculation.machine_name.config.machine = "{{machine_name}}"
 
 
 # Set which channel the RTD is plugged into.
-device.adc_0.config.channel = {{channel}}
+device.input_device.config.channel = {{channel}}

@@ -7,11 +7,11 @@
 
 
 #=-= Define Device Modules =-=
-[device.sensor]
+[device.input_device]
     module="temperature_ir_mlx90614"     # device_modules / file name
     class="MLX90614"
     interface="i2c0"
-[device.sensor.variables]
+[device.input_device.variables]
     object_temperature = "temperature"   # Key required by device module class. Latter value is blackboard name.
 
 
@@ -37,7 +37,7 @@
     period = 1.0 # seconds
     n_samples = 5
 [[measurement.sensing_stacks]]
-    device = "adc_0"
+    device = "input_device"
     pipeline = "pipeline"              # Why is this in quotes? It's not in quotes when defined above
 
 [output.overall]

@@ -7,11 +7,11 @@
 
 
 #=-= Define Device Modules =-=
-[device.adc_0]
+[device.input_device]
     module="rtd_sequentmicrosystems_hat" # device_modules / file name
     class="Sequent_8ch_RTD_HAT"
     interface="i2c0"
-[device.adc_0.variables]
+[device.input_device.variables]
     PT_RTD_resistance = "resistance"     # Key required by device module class. Latter value is blackboard name.
 
 
@@ -46,7 +46,7 @@
     period = 1.0 # seconds
     n_samples = 5
 [[measurement.sensing_stacks]]
-    device = "adc_0"
+    device = "input_device"
     pipeline = "single_rtd"              # Why is this in quotes? It's not in quotes when defined above
 
 [output.overall]
