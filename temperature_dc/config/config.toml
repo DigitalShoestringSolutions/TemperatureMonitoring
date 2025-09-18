@@ -29,9 +29,6 @@
     sample_count = 1
     sample_interval = 1
 
-[computing]
-    hardware="Pi4"
-
 [mqtt]
     broker = "mqtt.docker.local"
     port = 1883   #common mqtt ports are 1883 and 8883
@@ -46,3 +43,4 @@
     reconnect.initial = 5 # seconds
     reconnect.backoff = 2 # multiplier
     reconnect.limit = 60 # seconds
+
