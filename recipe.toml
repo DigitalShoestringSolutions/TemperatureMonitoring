@@ -16,7 +16,7 @@ recipe_vsn = "1.0.0"
 [service_module.temperature-sensing-1]
     source="sensing"
     containers = ["sensing"]
-    template.log_level = "warning"
+    template.log_level = "info"
 
 [service_module.data-storage]
     source = "data_storage"
