@@ -1,0 +1,9 @@
+solution_type = "temperature_monitoring"
+solution_version = "v2.0.0"
+
+# These are the defaults for these settings.
+# they can be modified using the control panel 
+# (changes are saved in the database in /data)
+[default_transmitted_stats]
+    running = true
+    usage = false
