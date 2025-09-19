@@ -69,6 +69,10 @@
   value = "temperature_rtd_sequent.toml"
 
 [[OUT.module_config_file.map]]
+  criteria = "sensor_type=rtd&rtd_amplifier=max31865"
+  value = "temperature_rtd_max31865.toml"
+
+[[OUT.module_config_file.map]]
   criteria = "sensor_type=ir&ir_sensor=mlx90614"
   value = "temperature_ir_mlx90614.toml"
 
