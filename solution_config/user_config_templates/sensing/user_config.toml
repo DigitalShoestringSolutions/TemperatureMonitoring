@@ -8,4 +8,6 @@ calculation.machine_name.config.machine = "{{machine_name}}"
 
 # Set which channel the RTD is plugged into.
 device.input_device.config.channel = {{channel}}
+{% if rtd_amplifier == "max31865" and setup_basic=="3u" %} # "ERROR: 'module' is a required property" if not using SPI, so this has to be conditional
 interface.spi0.config.device = {{spi_chip_select}}
+{% endif %}
