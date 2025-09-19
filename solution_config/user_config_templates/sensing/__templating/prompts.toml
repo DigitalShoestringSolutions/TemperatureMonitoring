@@ -40,6 +40,7 @@
   type = "select"
   prompt = "Which RTD amplifier are you using"
   opt.sequent = "Sequent 8 channel RTD DAQ HAT"
+  opt.max31865 = "MAX31865"
 
 [Q.ir_sensor]
   criteria = "sensor_type=ir"
@@ -51,6 +52,11 @@
   criteria = "sensor_type=rtd&rtd_amplifier=sequent"
   type = "text"
   prompt = "Which channel is the RTD plugged into?"
+
+[Q.spi_chip_select]
+  criteria = "sensor_type=rtd&rtd_amplifier=max31865"
+  type = "text"
+  prompt = "What chip select pin is the SPI device connected to"
 
 
 
@@ -73,6 +79,9 @@
 
 [OUT.channel]
   var = "channel" 
+
+[OUT.spi_chip_select]
+    var = "spi_chip_select"
 
 
 

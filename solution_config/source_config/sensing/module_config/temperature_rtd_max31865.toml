@@ -1,16 +1,16 @@
 #=-= Define Interface Modules =-=
-[interface.i2c0]
-    module="i2c"
-    class="I2C"
-[interface.i2c0.config]
-    bus=1
+[interface.spi0]
+    module="spi"
+    class="SPI"
+[interface.spi0.config]
+    device=0                             # device / chip select can be overwritten by channel user config
 
 
 #=-= Define Device Modules =-=
 [device.input_device]
-    module="temperature_rtd_sequentmicrosystems_hat" # device_modules / file name
-    class="Sequent_8ch_RTD_HAT"
-    interface="i2c0"
+    module="temperature_rtd_max31865"    # device_modules / file name
+    class="MAX31865"
+    interface="spi0"
 [device.input_device.variables]
     PT_RTD_resistance = "resistance"     # Key required by device module class. Latter value is blackboard name.
 
@@ -29,8 +29,8 @@
 [calculation.amplifier.config]
     nominal_resistance = 100             # ohms at 0 degrees. Optional here, defaults to 100.
 [calculation.amplifier.variables]
-    temperature = "temperature"          # Are these lines really required?
-    resistance = "resistance"            # These are set as defaults on py dict loading so should be optional
+    temperature = "temperature"
+    resistance = "resistance"
 
 
 #=-= Define Calculation Pipelines =-=
