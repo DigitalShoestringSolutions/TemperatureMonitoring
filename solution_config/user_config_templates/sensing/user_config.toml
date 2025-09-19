@@ -7,9 +7,9 @@ calculation.machine_name.config.machine = "{{machine_name}}"
 
 
 # Set which channel the RTD is plugged into.
-{% if sensor_type = "rtd" and rtd_amplifier == "sequent" %}
+{% if sensor_type == "rtd" and rtd_amplifier == "sequent" %}
 device.input_device.config.channel = {{channel}}
 {% endif %}
-{% if sensor_type = "rtd" and rtd_amplifier == "max31865" %} # "ERROR: 'module' is a required property" if not using SPI, so this has to be conditional
+{% if sensor_type == "rtd" and rtd_amplifier == "max31865" %} # "ERROR: 'module' is a required property" if not using SPI, so this has to be conditional
 interface.spi0.config.device = {{spi_chip_select}}
 {% endif %}
