@@ -53,7 +53,7 @@
     topic = "temperature_monitoring/{{machine}}"
 [output.overall.message_spec]
     timestamp = '$.timestamp'
-    temp = "$.temperature"        # What's with the $ ? Wasn't needed when specifying variables off the blackboard before
+    temperature = "$.temperature"        # What's with the $ ? Wasn't needed when specifying variables off the blackboard before
     machine="$.machine"
 
 

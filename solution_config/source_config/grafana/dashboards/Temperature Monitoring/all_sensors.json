@@ -159,7 +159,7 @@
             "uid": "influxdb"
           },
           "hide": false,
-          "query": "from(bucket: \"temperature_monitoring\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"temperature_reading\")\n\n  |> filter(fn: (r) => r[\"_field\"] == \"temp\")\n  |> group(columns: [\"machine\"])\n  \n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: true)\n  |> yield(name: \"mean\")\n\n",
+          "query": "from(bucket: \"temperature_monitoring\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"temperature_reading\")\n\n  |> filter(fn: (r) => r[\"_field\"] == \"temperature\")\n  |> group(columns: [\"machine\"])\n  \n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: true)\n  |> yield(name: \"mean\")\n\n",
           "refId": "A"
         }
       ],
@@ -238,7 +238,7 @@
             "uid": "influxdb"
           },
           "hide": false,
-          "query": "from(bucket: \"temperature_monitoring\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"temperature_reading\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"AlertVal\" or r[\"_field\"] == \"temp\") // only fields we are interested in\r\n  |> last()\r\n\r\n  |> map( fn: (r) => ({ r with Name: r.machine }) )                        // convert machine name from a tag to part of the result, so it survives pivot\r\n  |> keep(columns: [\"_time\", \"Name\", \"_field\", \"_value\"])                  // discard original machine tag (and everything else not needed)\r\n\r\n  |> pivot(rowKey: [\"Name\"], columnKey: [\"_field\"], valueColumn: \"_value\") // put AlertVal and temp on the same rows, matching by (last reading for) Name (aka machine name)\r\n\r\n  |> map(                                                                  // translate AlertVal ints into colours\r\n      fn: (r) => ({ r with color: \r\n          if      r.AlertVal == -1 then \"blue\"   // \"#1f60c4\" \r\n          else if r.AlertVal == 0  then \"green\"  // \"#37872d\"\r\n          else if r.AlertVal == 1  then \"red\"    // \"#c4162a\"  \r\n          else                          \"yellow\" // unknown or error\r\n      }))\r\n\r\n  |> keep(columns: [\"Name\", \"color\", \"temp\"])    // discard AlertVal\r\n",
+          "query": "from(bucket: \"temperature_monitoring\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"temperature_reading\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"AlertVal\" or r[\"_field\"] == \"temperature\") // only fields we are interested in\r\n  |> last()\r\n\r\n  |> map( fn: (r) => ({ r with Name: r.machine }) )                        // convert machine name from a tag to part of the result, so it survives pivot\r\n  |> keep(columns: [\"_time\", \"Name\", \"_field\", \"_value\"])                  // discard original machine tag (and everything else not needed)\r\n\r\n  |> pivot(rowKey: [\"Name\"], columnKey: [\"_field\"], valueColumn: \"_value\") // put AlertVal and temperature on the same rows, matching by (last reading for) Name (aka machine name)\r\n\r\n  |> map(                                                                  // translate AlertVal ints into colours\r\n      fn: (r) => ({ r with color: \r\n          if      r.AlertVal == -1 then \"blue\"   // \"#1f60c4\" \r\n          else if r.AlertVal == 0  then \"green\"  // \"#37872d\"\r\n          else if r.AlertVal == 1  then \"red\"    // \"#c4162a\"  \r\n          else                          \"yellow\" // unknown or error\r\n      }))\r\n\r\n  |> keep(columns: [\"Name\", \"color\", \"temperature\"])    // discard AlertVal\r\n",
           "refId": "A: Pivot"
         }
       ],
@@ -253,7 +253,7 @@
                 "handlerKey": "color"
               },
               {
-                "fieldName": "temp",
+                "fieldName": "temperature",
                 "handlerKey": "field.value"
               },
               {
