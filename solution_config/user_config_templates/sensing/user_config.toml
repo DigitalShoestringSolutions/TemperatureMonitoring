@@ -3,13 +3,13 @@ module_config_file = "./module_config/{{module_config_file}}"
 
 
 #   Set the machine name
-calculation.machine_name.config.machine = "{{machine_name}}"
+calculation.machine_name.config.machine = "{{machine_name_value}}"
 
 
 # Set which channel the RTD is plugged into.
-{% if sensor_type == "rtd" and rtd_amplifier == "sequent" %}
-device.input_device.config.channel = {{channel}}
+{% if sensor_type_value == "rtd" and rtd_amplifier_value == "sequent" %}
+device.input_device.config.channel = {{channel_value}}
 {% endif %}
-{% if sensor_type == "rtd" and rtd_amplifier == "max31865" %} # "ERROR: 'module' is a required property" if not using SPI, so this has to be conditional
-interface.spi0.config.device = {{spi_chip_select}}
+{% if sensor_type_value == "rtd" and rtd_amplifier_value == "max31865" %} # "ERROR: 'module' is a required property" if not using SPI, so this has to be conditional
+interface.spi0.config.device = {{spi_chip_select_value}}
 {% endif %}
