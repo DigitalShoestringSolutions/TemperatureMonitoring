@@ -11,6 +11,9 @@
     module="temperature_rtd_max31865"    # device_modules / file name
     class="MAX31865"
     interface="spi0"
+[device.input_device.config]
+# No information is needed here, but at the time of writing (Sensing v1.0.0) if this section of the table doesn't exist then the module fails to run. 
+# See https://github.com/DigitalShoestringSolutions/TemperatureMonitoring/pull/46#issuecomment-3318385209
 [device.input_device.variables]
     PT_RTD_resistance = "resistance"     # Key required by device module class. Latter value is blackboard name.
 
