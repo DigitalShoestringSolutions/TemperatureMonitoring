@@ -78,15 +78,20 @@
 
 
 
-[OUT.machine_name]
+[OUT.machine_name_value]
   var = "machine_name"
 
-[OUT.channel]
+[OUT.sensor_type_value]
+  var = "sensor_type"
+
+[OUT.rtd_amplifier_value]
+  var = "rtd_amplifier"
+
+[OUT.channel_value]
   var = "channel" 
 
-[OUT.spi_chip_select]
-    var = "spi_chip_select"
-
+[OUT.spi_chip_select_value]
+  var = "spi_chip_select"
 
 
 # Note: The following lines are examples of how to reference the answers in the user configuration template.
