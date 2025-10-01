@@ -11,7 +11,7 @@
     module="temperature_ir_mlx90614"     # device_modules / file name
     class="MLX90614"
     interface="i2c0"
-[device.input_device.variables]
+[device.input_device.variables]          # These two lines are optional as they set the value to the same as default.
     object_temperature = "temperature"   # Key required by device module class. Latter value is blackboard name.
 
 
@@ -21,7 +21,6 @@
     class="ConstantSet"                  # Is all this required just to tag the data with the machine name?
 [calculation.machine_name.config]
     machine = "Machine_1"                # Default unless overwritten in user config (which it always will be?)
-[calculation.machine_name.variables]     # no variables, as this ...thing... doesn't pull or push any data to the blackboard
 
 
 #=-= Define Calculation Pipelines =-=
@@ -38,27 +37,16 @@
     n_samples = 5
 [[measurement.sensing_stacks]]
     device = "input_device"
-    pipeline = "pipeline"              # Why is this in quotes? It's not in quotes when defined above
+    pipeline = "pipeline"                # Why is this in quotes? It's not in quotes when defined above
 
 [output.overall]
     topic = "temperature_monitoring/{{machine}}"
 [output.overall.message_spec]
     timestamp = '$.timestamp'
-    temperature = "$.temperature"               # What's with the $ ? Wasn't needed when specifying variables off the blackboard before
+    temperature = "$.temperature"        # What's with the $ ? Wasn't needed when specifying variables off the blackboard before
     machine="$.machine"
 
 
 [mqtt]
     broker = "mqtt.docker.local"
     port = 1883   #common mqtt ports are 1883 and 8883
-    topic_prefix = ""
-
-    #reconnection characteristics
-    # start: timeout = initial,
-    # if timeout < limit then
-    #   timeout = timeout*backoff
-    # else
-    #   timeout = limit
-    reconnect.initial = 5 # seconds
-    reconnect.backoff = 2 # multiplier
-    reconnect.limit = 60 # seconds

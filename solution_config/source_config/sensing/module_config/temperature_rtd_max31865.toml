@@ -11,9 +11,6 @@
     module="temperature_rtd_max31865"    # device_modules / file name
     class="MAX31865"
     interface="spi0"
-[device.input_device.config]
-# No information is needed here, but at the time of writing (Sensing v1.0.0) if this section of the table doesn't exist then the module fails to run. 
-# See https://github.com/DigitalShoestringSolutions/TemperatureMonitoring/pull/46#issuecomment-3318385209
 [device.input_device.variables]
     PT_RTD_resistance = "resistance"     # Key required by device module class. Latter value is blackboard name.
 
@@ -24,7 +21,6 @@
     class="ConstantSet"                  # Is all this required just to tag the data with the machine name?
 [calculation.machine_name.config]
     machine = "Machine_1"                # Default unless overwritten in user config (which it always will be?)
-[calculation.machine_name.variables]     # no variables, as this ...thing... doesn't pull or push any data to the blackboard
 
 [calculation.amplifier]
     module="gen_pt_rtd"
@@ -32,8 +28,8 @@
 [calculation.amplifier.config]
     nominal_resistance = 100             # ohms at 0 degrees. Optional here, defaults to 100.
 [calculation.amplifier.variables]
-    temperature = "temperature"
-    resistance = "resistance"
+    temperature = "temperature"          # This calculation module takes the resistance value from the blackboard and updates
+    resistance = "resistance"            # the temperature value on the blackboard. These 3 lines are optional as same as default.
 
 
 #=-= Define Calculation Pipelines =-=
@@ -63,14 +59,3 @@
 [mqtt]
     broker = "mqtt.docker.local"
     port = 1883   #common mqtt ports are 1883 and 8883
-    topic_prefix = ""
-
-    #reconnection characteristics
-    # start: timeout = initial,
-    # if timeout < limit then
-    #   timeout = timeout*backoff
-    # else
-    #   timeout = limit
-    reconnect.initial = 5 # seconds
-    reconnect.backoff = 2 # multiplier
-    reconnect.limit = 60 # seconds
