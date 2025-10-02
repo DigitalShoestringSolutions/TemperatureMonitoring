@@ -74,3 +74,7 @@ async def threshlds(topic, payload, config={}):
 
     # Save result for next time
     OldAlertVal = AlertVal
+
+
+# Start the trigger engine and its scheduler/event loops
+trigger.start()

@@ -24,11 +24,11 @@
 
 [Q.default_low_threshold]
 type="text" # no separate number type, must use text then parse with float()
-prompt="Default Power Factor (used for machines that don't have one specified)"
+prompt="Default Low Alert Threshold (used for machines that don't have one specified)"
 
 [Q.default_high_threshold]
 type="text" # no separate number type, must use text then parse with float()
-prompt="Default Voltage [Line-Neutral] (used for machines that don't have one specified)"
+prompt="Default High Alert Threshold (used for machines that don't have one specified)"
 
 
 [OUT.default_low_threshold_value]
