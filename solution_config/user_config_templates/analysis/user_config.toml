@@ -1,0 +1,16 @@
+[low_thresholds]
+
+    default = {{default_low_threshold_value}}
+
+    [low_thresholds.machines] # Currently machine-specific value cannot be set from prompts, must edit this file after building.
+        Machine_1 = 0
+        Machine_2 = 5
+
+
+[high_thresholds]
+
+    default = {{default_high_threshold_value}}
+
+    [high_thresholds.machines]
+        Machine_1 = 10
+        Machine_2 = 30
