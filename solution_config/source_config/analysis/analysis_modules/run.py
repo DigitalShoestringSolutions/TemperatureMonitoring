@@ -30,11 +30,11 @@ trigger = TriggerEngine(config)
 ## -------------
 
 # Default value for global variable
-OldAlertVal = 0
+OldAlertVal = None # will be overwritten after first comparision
 
 # Main function
-@trigger.mqtt.event("temperature_monitoring/#")
-async def threshlds(topic, payload, config={}):
+@trigger.mqtt.event("temperature_monitoring/+") # Subscribe to single depth only (machine names) to avoid regurgitating its own messages.
+async def thresholds(topic, payload, config={}):
     """Receives an MQTT message, compares the contained temperature reading to thresholds and send a new MQTT message with the topic suffix `/alerts`
     
     :param str topic:    The resolved topic of the incomming MQTT message
@@ -59,16 +59,18 @@ async def threshlds(topic, payload, config={}):
     else:
         AlertVal = 0
 
-    # iif results have changed, publish result
+    # iif results have changed, publish result. The option to publish regardless could be made configurable.
     if AlertVal != OldAlertVal:
         output_payload = {
             "timestamp"     : payload["timestamp"], # directly recycle
             "machine"       : machine,
             "AlertVal"      : AlertVal,
-            "ThresholdLow"  : low_threshold,
+            "ThresholdLow"  : low_threshold,        # Including threshold values just as a FYI for debugging
             "ThresholdHigh" : high_threshold,
         }
         pahopublish.single(topic=topic + "/alerts", payload=json.dumps(output_payload), hostname=config.get("output_broker", "mqtt.docker.local"), retain=True)
+        # Alerts suffix to topic could be configurable but not implementing until some demand
+
     else:
         pass # New message would be a repeat of the old, don't spam. Sounds like a good idea until the broker crashes and loses the retained message.
 
