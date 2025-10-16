@@ -1,7 +1,7 @@
 
 """Configure analysis module for temperature monitoring.
 
-Compares temperature readings to thresholds and posts alert 
+Compares temperature readings to thresholds and posts alerts to MQTT if the comparison result changes.
 
 """
 
@@ -43,36 +43,51 @@ async def thresholds(topic, payload, config={}):
     """
     global OldAlertVal # allow this func to save previous value in global variable
 
-    # extract machine name and temperature reading from payload
+    # extract machine name, temperature reading and timestamp from payload
     machine = payload["machine"]
     temperature = float(payload["temperature"])
+    timestamp = payload["timestamp"]
+    logger.debug(f"Temperature thresholds comparison received temperature {temperature} for machine {machine} at {timestamp}")
 
     # extract thresholds from machine-specific config
     high_threshold = float(config["high_thresholds"]["machines"].get(machine, config["high_thresholds"]["default"]))
     low_threshold = float(config["low_thresholds"]["machines"].get(machine, config["low_thresholds"]["default"]))
 
     # compare temperature reading to thresholds
+    logger.debug(f"comparing temperature {temperature} on machine {machine} to high threshold {high_threshold} and low threshold {low_threshold}")
     if temperature > high_threshold:
         AlertVal = 1
     elif temperature < low_threshold:
         AlertVal = -1
     else:
         AlertVal = 0
+    logger.debug(f"AlertVal for {machine} calculated as {AlertVal}")
 
     # iif results have changed, publish result. The option to publish regardless could be made configurable.
     if AlertVal != OldAlertVal:
+
+        # Prepare message variables
         output_payload = {
-            "timestamp"     : payload["timestamp"], # directly recycle
+            "timestamp"     : timestamp,
             "machine"       : machine,
             "AlertVal"      : AlertVal,
-            "ThresholdLow"  : low_threshold,        # Including threshold values just as a FYI for debugging
+            "ThresholdLow"  : low_threshold,                      # Including threshold values just as a FYI for debugging
             "ThresholdHigh" : high_threshold,
         }
-        pahopublish.single(topic=topic + "/alerts", payload=json.dumps(output_payload), hostname=config.get("output_broker", "mqtt.docker.local"), retain=True)
-        # Alerts suffix to topic could be configurable but not implementing until some demand
+        broker = config.get("output_broker", "mqtt.docker.local") 
+        topic = topic + "/alerts"                                 # Alerts suffix to topic could be configurable but not implementing until some demand
+
+        # Publish to MQTT
+        logger.info(f"AlertVal for machine {machine} changed from {OldAlertVal} to {AlertVal} at {timestamp}, publishing to broker {broker} topic {topic}")
+        pahopublish.single(topic=topic, payload=json.dumps(output_payload), hostname=broker, retain=True)
+        logger.debug(f"publication to {broker} complete")
+        
 
     else:
         pass # New message would be a repeat of the old, don't spam. Sounds like a good idea until the broker crashes and loses the retained message.
+        # Could have separate mqtt topics for every result vs only update on changes, but then why does the change-only topic exist?
+        logger.debug(f"AlertVal {AlertVal} unchanged, not publishing")
+
 
     # Save result for next time
     OldAlertVal = AlertVal
