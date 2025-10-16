@@ -78,7 +78,8 @@ async def thresholds(topic, payload, config={}):
         topic = topic + "/alerts"                                 # Alerts suffix to topic could be configurable but not implementing until some demand
 
         # Publish to MQTT
-        logger.info(f"AlertVal for machine {machine} changed from {OldAlertVal} to {AlertVal} at {timestamp}, publishing to broker {broker} topic {topic}")
+        logger.info(f"Machine {machine} temperature {temperature} passing thresholds {low_threshold} and {high_threshold} at {timestamp}")
+        logger.info(f"Publishing change of AlertVal from {OldAlertVal} to {AlertVal} to broker: {broker} topic: {topic}")
         pahopublish.single(topic=topic, payload=json.dumps(output_payload), hostname=broker, retain=True)
         logger.debug(f"publication to {broker} complete")
         
