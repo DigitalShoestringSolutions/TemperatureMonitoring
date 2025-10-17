@@ -1,12 +1,12 @@
 # Temperature Monitoring Starter Solution
 
-## Install the Shoestring App
+## Install the Shoestring Assembler
 In the terminal, run:
 - `sudo apt instll pipx -y`
 - `sudo pipx run shoestring-setup`
 - `sudo reboot` if prompted to restart
 
-## Use the Shoestring App to download and configure this Solution
+## Use the Shoestring Assembler to download and configure this Solution
 - In the terminal run `shoestring app`, or double click the desktop icon called `Shoestring`.  
 - Use the `Download` button to select `Temperature Monitoring`. Select the latest release tag.  
 - Follow the prompts to configure
