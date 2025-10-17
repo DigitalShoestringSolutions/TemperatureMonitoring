@@ -13,7 +13,7 @@ recipe_vsn = "1.0.0"
 
 
 # Service module instances present in this solution
-[service_module.temperature-sensing-1]
+[service_module.sensing]
     source="sensing"
     containers = ["sensing"]
     template.log_level = "info"
