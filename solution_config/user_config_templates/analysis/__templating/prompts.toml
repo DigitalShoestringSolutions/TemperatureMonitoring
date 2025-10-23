@@ -30,6 +30,9 @@ prompt="Default Low Alert Threshold (used for machines that don't have one speci
 type="text" # no separate number type, must use text then parse with float()
 prompt="Default High Alert Threshold (used for machines that don't have one specified)"
 
+[Q.default_hyst]
+type="text" # no separate number type, must use text then parse with float()
+prompt="Default hysteresis for resetting alerts (used for machines that don't have one specified)"
 
 [OUT.default_low_threshold_value]
 var="default_low_threshold"
@@ -37,6 +40,8 @@ var="default_low_threshold"
 [OUT.default_high_threshold_value]
 var="default_high_threshold"
 
+[OUT.default_hyst_value]
+var="default_hyst"
 
 # Note: The following lines are examples of how to reference the answers in the user configuration template.
 # For example, in user_config.toml, you can use {{machine_name}} to insert the machine name provided by the user.

@@ -49,14 +49,21 @@ async def thresholds(topic, payload, config={}):
     logger.debug(f"Temperature thresholds comparison received temperature {temperature} for machine {machine} at {timestamp}")
 
     # extract thresholds from machine-specific config
-    high_threshold = float(config["high_thresholds"]["machines"].get(machine, config["high_thresholds"]["default"]))
-    low_threshold = float(config["low_thresholds"]["machines"].get(machine, config["low_thresholds"]["default"]))
+    machine_thresholds = config["thresholds"]["machines"].get(machine, config["thresholds"]["default"])
+    high_threshold = float(machine_thresholds["high"]["value"])
+    high_hyst = float(machine_thresholds["high"]["hyst"])
+    low_threshold = float(machine_thresholds["low"]["value"])
+    low_hyst = float(machine_thresholds["low"]["hyst"])
 
     # compare temperature reading to thresholds
-    logger.debug(f"comparing temperature {temperature} on machine {machine} to high threshold {high_threshold} and low threshold {low_threshold}")
+    logger.debug(f"comparing temperature {temperature} on machine {machine} to high threshold {high_threshold} (-{high_hyst}) and low threshold {low_threshold} (+{low_hyst})")
     if temperature > high_threshold:
         AlertVal = 1
+    elif temperature > (high_threshold - high_hyst) and OldAlertVal == 1:
+        AlertVal = 1
     elif temperature < low_threshold:
+        AlertVal = -1
+    elif temperature < (low_threshold + low_hyst) and OldAlertVal == -1:
         AlertVal = -1
     else:
         AlertVal = 0
@@ -77,7 +84,7 @@ async def thresholds(topic, payload, config={}):
         topic = topic + "/alerts"                                 # Alerts suffix to topic could be configurable but not implementing until some demand
 
         # Publish to MQTT
-        logger.info(f"Machine {machine} temperature {temperature} passing thresholds {low_threshold} and {high_threshold} at {timestamp}")
+        logger.info(f"Machine {machine} temperature {temperature} passing thresholds {low_threshold} (+{low_hyst}) and {high_threshold} (-{high_hyst}) at {timestamp}")
         logger.info(f"Publishing change of AlertVal from {OldAlertVal} to {AlertVal} to broker: {broker} topic: {topic}")
         pahopublish.single(topic=topic, payload=json.dumps(output_payload), hostname=broker, retain=True)
         logger.debug(f"publication to {broker} complete")
