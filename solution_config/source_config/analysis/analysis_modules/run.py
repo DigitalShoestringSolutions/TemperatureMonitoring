@@ -1,4 +1,3 @@
-
 """Configure analysis module for temperature monitoring.
 
 Compares temperature readings to thresholds and posts alerts to MQTT if the comparison result changes.
@@ -36,7 +35,7 @@ OldAlertVal = None # will be overwritten after first comparision
 @trigger.mqtt.event("temperature_monitoring/+") # Subscribe to single depth only (machine names) to avoid regurgitating its own messages.
 async def thresholds(topic, payload, config={}):
     """Receives an MQTT message, compares the contained temperature reading to thresholds and send a new MQTT message with the topic suffix `/alerts`
-    
+
     :param str topic:    The resolved topic of the incomming MQTT message
     :param dict payload: The payload of the incomming MQTT message, expecting json loaded as dict
     :param dict config:  The module config
@@ -82,7 +81,7 @@ async def thresholds(topic, payload, config={}):
         logger.info(f"Publishing change of AlertVal from {OldAlertVal} to {AlertVal} to broker: {broker} topic: {topic}")
         pahopublish.single(topic=topic, payload=json.dumps(output_payload), hostname=broker, retain=True)
         logger.debug(f"publication to {broker} complete")
-        
+
 
     else:
         pass # New message would be a repeat of the old, don't spam. Sounds like a good idea until the broker crashes and loses the retained message.
