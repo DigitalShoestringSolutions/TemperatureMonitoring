@@ -33,6 +33,7 @@
   opt.rtd = "RTD"
   opt.thermocouple = "Thermocouple"
   opt.ir = "Infrared"
+  opt.ic = "Direct temperature sensing Integrated Circuit"
   opt.simulator = "simulator"
 
 [Q.rtd_amplifier]
@@ -47,6 +48,12 @@
   type = "select"
   prompt = "Which IR temperature sensor are you using"
   opt.mlx90614 = "MLX90614"
+
+[Q.ic_sensor]
+  criteria = "sensor_type=ic"
+  type = "select"
+  prompt = "Which temperature sensing IC are you using"
+  opt.ds18b20 = "DS18B20"
 
 [Q.channel]
   criteria = "sensor_type=rtd&rtd_amplifier=sequent"
@@ -76,6 +83,10 @@
   criteria = "sensor_type=ir&ir_sensor=mlx90614"
   value = "temperature_ir_mlx90614.toml"
 
+[[OUT.module_config_file.map]]
+  criteria = "sensor_type=ic&ic_sensor=ds18b20"
+  value = "temperature_ds18b20.toml"
+
 
 
 [OUT.machine_name_value]
@@ -92,6 +103,9 @@
 
 [OUT.spi_chip_select_value]
   var = "spi_chip_select"
+
+[OUT.ic_sensor_value]
+  var = "ic_sensor"
 
 
 # Note: The following lines are examples of how to reference the answers in the user configuration template.

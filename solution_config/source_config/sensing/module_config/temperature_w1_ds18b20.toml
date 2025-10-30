@@ -1,0 +1,51 @@
+#=-= Define Interface Modules =-=
+[interface.one_wire_0]
+    module="one_wire"
+    class="OneWire"
+[interface.one_wire_0.config]              # At present the one_wire interface accepts no config...
+
+
+#=-= Define Device Modules =-=
+[device.input_device]
+    module="temperature_ds18b20.py"        # device_modules / file name
+    class="DS18B20"
+    interface="one_wire_0"
+[device.input_device.variables]            # These two lines may only set the value to the same as default, but this one is required by schema
+    temperature = "temperature"            # Key required by device module class. Latter value is blackboard name.
+
+
+#=-= Define Calculation Modules =-=
+[calculation.machine_name]
+    module="gen_constants"
+    class="ConstantSet"
+[calculation.machine_name.config]
+    machine = "overwritten_by_user_config"
+[calculation.machine_name.variables]       # Although empty, required by schema
+
+#=-= Define Calculation Pipelines =-=
+[pipelines]
+    pipeline = ["machine_name"]
+
+
+#=-= Define Measurements Pipelines =-=
+[measurement]
+    module="gen_sample"
+    class="SingleSampleAvg"
+[measurement.config]
+    period = 1.0 # seconds
+    n_samples = 5
+[[measurement.sensing_stacks]]
+    device = "input_device"
+    pipeline = "pipeline"
+
+[output.overall]
+    topic = "temperature_monitoring/{{machine}}"
+[output.overall.message_spec]
+    timestamp = '$.timestamp'
+    temperature = "$.temperature"
+    machine="$.machine"
+
+
+[mqtt]
+    broker = "mqtt.docker.local"
+    port = 1883   #common mqtt ports are 1883 and 8883
