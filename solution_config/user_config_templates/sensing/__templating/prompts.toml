@@ -29,30 +29,29 @@
 
 [Q.sensor_type]
   type = "select"
-  prompt = "Which type of temperature sensor are you using"
+  prompt = "Which type of temperature sensor are you using?"
   opt.rtd = "RTD"
   opt.thermocouple = "Thermocouple"
   opt.ir = "Infrared"
-  opt.ic = "Direct temperature sensing Integrated Circuit"
-  opt.simulator = "simulator"
+  opt.ic = "Direct temperature sensing integrated circuit"
 
 [Q.rtd_amplifier]
   criteria = "sensor_type=rtd"
   type = "select"
-  prompt = "Which RTD amplifier are you using"
+  prompt = "Which RTD amplifier are you using?"
   opt.sequent = "Sequent 8 channel RTD DAQ HAT"
   opt.max31865 = "MAX31865"
 
 [Q.ir_sensor]
   criteria = "sensor_type=ir"
   type = "select"
-  prompt = "Which IR temperature sensor are you using"
+  prompt = "Which IR temperature sensor are you using?"
   opt.mlx90614 = "MLX90614"
 
 [Q.ic_sensor]
   criteria = "sensor_type=ic"
   type = "select"
-  prompt = "Which temperature sensing IC are you using"
+  prompt = "Which temperature sensing IC are you using?"
   opt.ds18b20 = "DS18B20"
 
 [Q.channel]
@@ -63,13 +62,9 @@
 [Q.spi_chip_select]
   criteria = "sensor_type=rtd&rtd_amplifier=max31865"
   type = "text"
-  prompt = "What chip select pin is the SPI device connected to"
+  prompt = "What chip select pin is the SPI device connected to?"
 
 
-
-[[OUT.module_config_file.map]]
-  criteria = "sensor_type=simulator"
-  value = "temperature_mock.toml"
 
 [[OUT.module_config_file.map]]
   criteria = "sensor_type=rtd&rtd_amplifier=sequent"
