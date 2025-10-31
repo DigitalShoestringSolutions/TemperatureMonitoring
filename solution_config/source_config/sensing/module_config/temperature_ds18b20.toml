@@ -30,10 +30,9 @@
 #=-= Define Measurements Pipelines =-=
 [measurement]
     module="gen_sample"
-    class="SingleSampleAvg"
+    class="SingleSample"
 [measurement.config]
     period = 1.0 # seconds
-    n_samples = 5
 [[measurement.sensing_stacks]]
     device = "input_device"
     pipeline = "pipeline"
