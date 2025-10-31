@@ -2,12 +2,12 @@
 [interface.one_wire_0]
     module="one_wire"
     class="OneWire"
-[interface.one_wire_0.config]              # At present the one_wire interface accepts no config...
+[interface.one_wire_0.config]              # Even if this line is removed, a kwarg 'config' is still passed to the OneWire class instance. 
 
 
 #=-= Define Device Modules =-=
 [device.input_device]
-    module="temperature_ds18b20.py"        # device_modules / file name
+    module="temperature_ds18b20"           # device_modules / file name
     class="DS18B20"
     interface="one_wire_0"
 [device.input_device.variables]            # These two lines may only set the value to the same as default, but this one is required by schema
