@@ -31,7 +31,7 @@
   type = "select"
   prompt = "Which type of temperature sensor are you using?"
   opt.rtd = "RTD"
-  opt.thermocouple = "Thermocouple"
+  #opt.thermocouple = "Thermocouple"
   opt.ir = "Infrared"
   opt.ic = "Direct temperature sensing integrated circuit"
 
