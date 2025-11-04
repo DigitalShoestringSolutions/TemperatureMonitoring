@@ -41,13 +41,15 @@ async def thresholds(topic, payload, config={}):
     :param dict config:  The module config
     """
     global OldAlertVals  # allow this func to save previous value in global variable
-    OldAlertVal = OldAlertVals.get(machine, None)  # extract previous alert value for this machine
 
     # extract machine name, temperature reading and timestamp from payload
     machine = payload["machine"]
     temperature = float(payload["temperature"])
     timestamp = payload["timestamp"]
     logger.debug(f"Temperature thresholds comparison received temperature {temperature} for machine {machine} at {timestamp}")
+    
+    # extract previous alert value for this machine from global variable
+    OldAlertVal = OldAlertVals.get(machine, None)
 
     # extract thresholds from machine-specific config
     machine_thresholds = config["thresholds"]["machines"].get(machine, config["thresholds"]["default"])
