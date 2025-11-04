@@ -29,7 +29,7 @@ trigger = TriggerEngine(config)
 ## -------------
 
 # Default value for global variable
-OldAlertVal = None # will be overwritten after first comparision
+OldAlertVals = {} # machine-specific values will be added after first comparision
 
 # Main function
 @trigger.mqtt.event("temperature_monitoring/+") # Subscribe to single depth only (machine names) to avoid regurgitating its own messages.
@@ -40,7 +40,7 @@ async def thresholds(topic, payload, config={}):
     :param dict payload: The payload of the incomming MQTT message, expecting json loaded as dict
     :param dict config:  The module config
     """
-    global OldAlertVal # allow this func to save previous value in global variable
+    global OldAlertVals # allow this func to save previous value in global variable
 
     # extract machine name, temperature reading and timestamp from payload
     machine = payload["machine"]
@@ -54,23 +54,23 @@ async def thresholds(topic, payload, config={}):
     high_hyst = float(machine_thresholds["high"]["hyst"])
     low_threshold = float(machine_thresholds["low"]["value"])
     low_hyst = float(machine_thresholds["low"]["hyst"])
-
-    # compare temperature reading to thresholds
     logger.debug(f"comparing temperature {temperature} on machine {machine} to high threshold {high_threshold} (-{high_hyst}) and low threshold {low_threshold} (+{low_hyst})")
+    
+    # compare temperature reading to thresholds
     if temperature > high_threshold:
         AlertVal = 1
-    elif temperature > (high_threshold - high_hyst) and OldAlertVal == 1:
+    elif temperature > (high_threshold - high_hyst) and OldAlertVals[machine] == 1:
         AlertVal = 1
     elif temperature < low_threshold:
         AlertVal = -1
-    elif temperature < (low_threshold + low_hyst) and OldAlertVal == -1:
+    elif temperature < (low_threshold + low_hyst) and OldAlertVals[machine] == -1:
         AlertVal = -1
     else:
         AlertVal = 0
     logger.debug(f"AlertVal for {machine} calculated as {AlertVal}")
 
     # iif results have changed, publish result. The option to publish regardless could be made configurable.
-    if AlertVal != OldAlertVal:
+    if AlertVal != OldAlertVals[machine]:
 
         # Prepare message variables
         output_payload = {
@@ -85,7 +85,7 @@ async def thresholds(topic, payload, config={}):
 
         # Publish to MQTT
         logger.info(f"Machine {machine} temperature {temperature} passing thresholds {low_threshold} (+{low_hyst}) and {high_threshold} (-{high_hyst}) at {timestamp}")
-        logger.info(f"Publishing change of AlertVal from {OldAlertVal} to {AlertVal} to broker: {broker} topic: {topic}")
+        logger.info(f"Publishing change of AlertVal from {OldAlertVals[machine]} to {AlertVal} to broker: {broker} topic: {topic}")
         pahopublish.single(topic=topic, payload=json.dumps(output_payload), hostname=broker, retain=True)
         logger.debug(f"publication to {broker} complete")
 
@@ -97,7 +97,7 @@ async def thresholds(topic, payload, config={}):
 
 
     # Save result for next time
-    OldAlertVal = AlertVal
+    OldAlertVals[machine] = AlertVal
 
 
 # Start the trigger engine and its scheduler/event loops
