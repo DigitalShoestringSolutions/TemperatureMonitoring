@@ -362,7 +362,7 @@
             "type": "influxdb",
             "uid": "influxdb"
           },
-          "query": "import \"date\"\n\nstart = from(bucket: \"temperature_monitoring\")\n|> range(start: date.sub(d:1d,from:v.timeRangeStart), stop: v.timeRangeStart)\n|> filter(fn: (r) => r[\"_measurement\"] == \"temperature_reading\")\n|> filter(fn: (r) => r[\"_field\"] == \"AlertVal\")\n|> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\n|> last()\n|> map(fn: (r) => ({r with _time: v.timeRangeStart}))\n\nbody = from(bucket: \"temperature_monitoring\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"temperature_reading\")\n  |> filter(fn: (r) => r[\"_field\"] == \"AlertVal\")\n  |> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\n\n\ndataset = union(tables: [start,body])\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"last\")\n\n",
+          "query": "import \"date\"\n\nstart = from(bucket: \"temperature_monitoring\")\n|> range(start: date.sub(d:2h,from:v.timeRangeStart), stop: v.timeRangeStart)\n|> filter(fn: (r) => r[\"_measurement\"] == \"temperature_reading\")\n|> filter(fn: (r) => r[\"_field\"] == \"AlertVal\")\n|> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\n|> last()\n|> map(fn: (r) => ({r with _time: v.timeRangeStart}))\n\nbody = from(bucket: \"temperature_monitoring\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"temperature_reading\")\n  |> filter(fn: (r) => r[\"_field\"] == \"AlertVal\")\n  |> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\n\n\ndataset = union(tables: [start,body])\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n  |> yield(name: \"last\")\n\n",
           "refId": "A"
         }
       ],
@@ -458,7 +458,7 @@
             "type": "influxdb",
             "uid": "influxdb"
           },
-          "query": "import \"date\"\n\nfrom(bucket: \"temperature_monitoring\")\n|> range(start: date.sub(d:1d,from:v.timeRangeStart), stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"temperature_reading\")\n  |> filter(fn: (r) => r[\"_field\"] == \"AlertVal\")\n  |> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\n  |> last()",
+          "query": "import \"date\"\n\nfrom(bucket: \"temperature_monitoring\")\n|> range(start: date.sub(d:2h,from:v.timeRangeStart), stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"temperature_reading\")\n  |> filter(fn: (r) => r[\"_field\"] == \"AlertVal\")\n  |> filter(fn: (r) => r[\"machine\"] == \"${machine}\")\n  |> last()",
           "refId": "A"
         }
       ],
@@ -505,6 +505,6 @@
   "timezone": "",
   "title": "Single Sensor",
   "uid": "70aiGq34k",
-  "version": 13,
+  "version": 1,
   "weekStart": ""
 }
