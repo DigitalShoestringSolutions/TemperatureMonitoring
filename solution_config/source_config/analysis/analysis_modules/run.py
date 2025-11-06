@@ -81,12 +81,10 @@ async def thresholds(topic, payload, config={}):  # per-machine class instances 
     if (AlertVal != OldAlertVal):
         SendUpdate = True
         logger.info(f"Machine {machine} temperature {temperature} passing thresholds {low_threshold} (+{low_hyst}) and {high_threshold} (-{high_hyst}) at {timestamp}")
-        logger.info(f"Publishing machine {machine} change of AlertVal from {OldAlertVal} to {AlertVal} to broker: {broker} topic: {topic}")
 
     if (datetime.datetime.fromisoformat(timestamp) > (datetime.datetime.fromisoformat(OldAlertTime) + datetime.timedelta(hours=1))):
         SendUpdate = True
         logger.info(f"Sending repeat AlertVal message for Machine {machine} at temperature {temperature} as previous update was > 1h ago")
-        logger.info(f"Publishing machine {machine} AlertVal {AlertVal} to broker: {broker} topic: {topic}")
 
     if SendUpdate:
         # Prepare message variables
@@ -101,6 +99,7 @@ async def thresholds(topic, payload, config={}):  # per-machine class instances 
         topic = topic + "/alerts"                                 # Alerts suffix to topic could be configurable but not implementing until some demand
 
         # Publish to MQTT
+        logger.info(f"Publishing machine {machine} AlertVal {AlertVal} to broker: {broker} topic: {topic}")
         pahopublish.single(topic=topic, payload=json.dumps(output_payload), hostname=broker, retain=True)
         logger.debug(f"publication to {broker} complete")
 
