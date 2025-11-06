@@ -5,6 +5,7 @@ Compares temperature readings to thresholds and posts alerts to MQTT if the comp
 """
 
 import logging
+import datetime
 
 # Internal module imports
 from trigger.engine import TriggerEngine
@@ -28,8 +29,9 @@ trigger = TriggerEngine(config)
 
 ## -------------
 
-# Default value for global variable
+# Default value for global variables
 OldAlertVals = {} # machine-specific values will be added after first comparision
+OldAlertTimes = {} # machine-specific timestamps when alert status was last published
 
 # Main function
 @trigger.mqtt.event("temperature_monitoring/+") # Subscribe to single depth only (machine names) to avoid regurgitating its own messages.
@@ -50,6 +52,7 @@ async def thresholds(topic, payload, config={}):
     
     # extract previous alert value for this machine from global variable
     OldAlertVal = OldAlertVals.get(machine, None)
+    OldAlertTime = OldAlertTimes.get(machine, "2021-01-01T00:00:00+00:00")  # Default to a time in the past that will parse
 
     # extract thresholds from machine-specific config
     machine_thresholds = config["thresholds"]["machines"].get(machine, config["thresholds"]["default"])
@@ -72,9 +75,19 @@ async def thresholds(topic, payload, config={}):
         AlertVal = 0
     logger.debug(f"AlertVal for {machine} calculated as {AlertVal}")
 
-    # iif results have changed, publish result. The option to publish regardless could be made configurable.
-    if AlertVal != OldAlertVal:
+    # iif results have changed, or previous output was more than 1h ago, publish result. The option to publish regardless could be made configurable.
+    SendUpdate = False
+    if (AlertVal != OldAlertVal):
+        SendUpdate = True
+        logger.info(f"Machine {machine} temperature {temperature} passing thresholds {low_threshold} (+{low_hyst}) and {high_threshold} (-{high_hyst}) at {timestamp}")
+        logger.info(f"Publishing machine {machine} change of AlertVal from {OldAlertVal} to {AlertVal} to broker: {broker} topic: {topic}")
 
+    if (datetime.datetime.fromisoformat(timestamp) > (datetime.datetime.fromisoformat(OldAlertTime) + datetime.timedelta(hours=1))):
+        SendUpdate = True
+        logger.info(f"Sending repeat AlertVal message for Machine {machine} at temperature {temperature} as previous update was > 1h ago")
+        logger.info(f"Publishing machine {machine} AlertVal {AlertVal} to broker: {broker} topic: {topic}")
+
+    if SendUpdate:
         # Prepare message variables
         output_payload = {
             "timestamp"     : timestamp,
@@ -87,8 +100,6 @@ async def thresholds(topic, payload, config={}):
         topic = topic + "/alerts"                                 # Alerts suffix to topic could be configurable but not implementing until some demand
 
         # Publish to MQTT
-        logger.info(f"Machine {machine} temperature {temperature} passing thresholds {low_threshold} (+{low_hyst}) and {high_threshold} (-{high_hyst}) at {timestamp}")
-        logger.info(f"Publishing change of AlertVal from {OldAlertVal} to {AlertVal} to broker: {broker} topic: {topic}")
         pahopublish.single(topic=topic, payload=json.dumps(output_payload), hostname=broker, retain=True)
         logger.debug(f"publication to {broker} complete")
 
@@ -101,6 +112,7 @@ async def thresholds(topic, payload, config={}):
 
     # Save result for next time
     OldAlertVals[machine] = AlertVal
+    OldAlertTimes[machine] = timestamp
 
 
 # Start the trigger engine and its scheduler/event loops
