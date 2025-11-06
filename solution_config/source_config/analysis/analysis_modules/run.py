@@ -34,8 +34,8 @@ OldAlertVals = {} # machine-specific values will be added after first comparisio
 OldAlertTimes = {} # machine-specific timestamps when alert status was last published
 
 # Main function
-@trigger.mqtt.event("temperature_monitoring/+") # Subscribe to single depth only (machine names) to avoid regurgitating its own messages.
-async def thresholds(topic, payload, config={}):
+@trigger.mqtt.event("temperature_monitoring/+")   # Subscribe to single depth only (machine names) to avoid regurgitating its own messages.
+async def thresholds(topic, payload, config={}):  # per-machine class instances would be nice, to make saving context easier than global vars
     """Receives an MQTT message, compares the contained temperature reading to thresholds and send a new MQTT message with the topic suffix `/alerts`
 
     :param str topic:    The resolved topic of the incomming MQTT message
@@ -43,6 +43,7 @@ async def thresholds(topic, payload, config={}):
     :param dict config:  The module config
     """
     global OldAlertVals  # allow this func to save previous value in global variable
+    global OldAlertTimes
 
     # extract machine name, temperature reading and timestamp from payload
     machine = payload["machine"]
