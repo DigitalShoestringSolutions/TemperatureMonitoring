@@ -66,7 +66,7 @@ recipe_vsn = "1.0.0"
 # Available module code sources which can feed the above instances
 [source.sensing]
     git.path = "sm_SensingDC"
-    git.branch = "feature/w1"
+    git.tag = "v1.4.0"
 [source.data_storage]
     git.path = "sm_timeseries_db"
     git.tag = "v2.0.0"
