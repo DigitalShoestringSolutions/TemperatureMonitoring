@@ -39,6 +39,7 @@ recipe_vsn = "1.0.0"
     template.log_level = "info"
 
 
+
 # Infrastructure modules present in this solution
 [infrastructure.mqtt-broker]
     source = "mqtt_broker"
@@ -67,22 +68,27 @@ recipe_vsn = "1.0.0"
 [source.sensing]
     git.path = "sm_SensingDC"
     git.tag = "v1.4.0"
+
 [source.data_storage]
     git.path = "sm_timeseries_db"
     git.tag = "v2.0.0"
+
 [source.grafana]
     git.path = "sm_grafana_ui"
     git.tag = "v2.0.0"
+
 [source.analysis]
     git.path = "sm_analysis"
-    git.tag = "v0.1.0"
+    git.tag = "v0.2.1"
 
 [source.mqtt_broker]
     git.path = "sm_mqtt_broker"
     git.tag = "v2.0.0"
+
 [source.logging]
     git.path = "Logging"
     git.tag = "v1.0.0"
+
 [source.plink]
     git.path = "PlatformLink"
     git.tag = "v1.0.0"
