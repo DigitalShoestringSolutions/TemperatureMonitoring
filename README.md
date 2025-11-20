@@ -2,7 +2,7 @@
 
 ## Install the Shoestring Assembler
 In the terminal, run:
-- `sudo apt instll pipx -y`
+- `sudo apt install pipx -y`
 - `sudo pipx run shoestring-setup`
 - `sudo reboot` if prompted to restart
 
