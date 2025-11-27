@@ -1,0 +1,62 @@
+#=-= Define Interface Modules =-=
+[interface.i2c0]
+    module="i2c"
+    class="I2C"
+[interface.i2c0.config]
+    bus=1
+
+
+#=-= Define Device Modules =-=
+[device.input_device]
+    module="temperature_rtd_sequentmicrosystems_hat" # device_modules / file name
+    class="Sequent_8ch_RTD_HAT"
+    interface="i2c0"
+[device.input_device.variables]            # These two lines may only set the value to the same as default, but this one is required by schema
+    PT_RTD_resistance = "resistance"       # Key required by device module class. Latter value is blackboard name.
+
+
+#=-= Define Calculation Modules =-=
+[calculation.machine_name]
+    module="gen_constants"
+    class="ConstantSet"
+[calculation.machine_name.config]
+    machine = "overwritten_by_user_config"
+[calculation.machine_name.variables]       # Although empty, required by schema
+
+[calculation.amplifier]
+    module="gen_pt_rtd"
+    class="PT_RTD"
+[calculation.amplifier.config]
+    nominal_resistance = 100               # ohms at 0 degrees. Optional here, defaults to 100.
+[calculation.amplifier.variables]          # This calculation module takes the resistance value from the blackboard
+    temperature = "temperature"            # and updates the temperature value on the blackboard.
+    resistance = "resistance"              # These 3 lines may set values as same as default but are required here by schema.
+
+
+#=-= Define Calculation Pipelines =-=
+[pipelines]
+    single_rtd = ["amplifier","machine_name"]
+
+
+#=-= Define Measurements Pipelines =-=
+[measurement]
+    module="gen_sample"
+    class="SingleSampleAvg"
+[measurement.config]
+    period = 1.0 # seconds
+    n_samples = 5
+[[measurement.sensing_stacks]]
+    device = "input_device"
+    pipeline = "single_rtd"
+
+[output.overall]
+    topic = "temperature_monitoring/{{machine}}"
+[output.overall.message_spec]
+    timestamp = '$.timestamp'
+    temperature = "$.temperature"
+    machine="$.machine"
+
+
+[mqtt]
+    broker = "mqtt.docker.local"
+    port = 1883   #common mqtt ports are 1883 and 8883

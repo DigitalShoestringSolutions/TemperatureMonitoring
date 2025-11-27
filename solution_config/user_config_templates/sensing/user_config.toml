@@ -1,0 +1,19 @@
+# select a config file appropriate for your hardware and wiring setup
+module_config_file = "./module_config/{{module_config_file}}"
+
+
+#   Set the machine name
+calculation.machine_name.config.machine = "{{machine_name_value}}"
+
+{% if sensor_type_value == "rtd" %}
+# Set which channel the RTD is plugged into.
+{% endif %}
+{% if sensor_type_value == "rtd" and rtd_amplifier_value == "sequent" %}
+device.input_device.config.channel = {{channel_rtd_value}} # Sequent RTD DAQ HAT supports 8 RTDs, acceptable channel numbers are 1-8 inclusive.
+{% endif %}
+{% if sensor_type_value == "ic" and ic_sensor_value == "ds18b20" %}
+device.input_device.config.channel = {{channel_ic_value}} # DS18B20 acceptable channel numbers are 1 and above
+{% endif %}
+{% if sensor_type_value == "rtd" and rtd_amplifier_value == "max31865" %}
+interface.spi0.config.device = {{spi_chip_select_value}} # The MAX31865 only supports a single RTD, but multiple chips could be used on the same SPI bus. 0 or 1.
+{% endif %}
